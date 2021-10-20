@@ -34,7 +34,7 @@ public class Event {
         int nReportId = nextReporterID;
         int nMetricId = nextMetricID;
         Date nTimeStamp = new Date(System.currentTimeMillis());
-        int nMetricValue = 0; // TODO: handle metricValue
+        int nMetricValue = 0; // TODO: figure out metricValue
         String nMessage = messageSupplier.get();
         nextReporterID++;
         nextMetricID++;
