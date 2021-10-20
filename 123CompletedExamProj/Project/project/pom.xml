@@ -51,8 +51,14 @@
       <artifactId>kafka-clients</artifactId>
       <version>3.0.0</version>
     </dependency>
+    <!-- https://mvnrepository.com/artifact/org.apache.zookeeper/zookeeper -->
+<dependency>
+  <groupId>org.apache.zookeeper</groupId>
+  <artifactId>zookeeper</artifactId>
+  <version>3.7.0</version>
+</dependency>
 
-  </dependencies>
+  </dependencies> <!-- end of dependencies -->
   <build>
     <plugins>
       <plugin>

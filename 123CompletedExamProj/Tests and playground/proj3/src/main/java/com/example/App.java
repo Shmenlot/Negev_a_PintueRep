@@ -1,9 +1,5 @@
 package com.example;
 
-import java.time.Duration;
-import java.util.concurrent.TimeUnit;
-import java.util.function.Consumer;
-
 /**
  * Hello world!
  */
