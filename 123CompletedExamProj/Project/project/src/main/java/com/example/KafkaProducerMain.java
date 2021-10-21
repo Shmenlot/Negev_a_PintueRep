@@ -17,6 +17,8 @@ public class KafkaProducerMain {
     private static Properties prop;
     private static KafkaProducer<String, String> producer;
 
+    //TODO: add main that send every second
+    //TODO: after adding main change all methods to private
     public static void initialize() {
         // create producer properties
         prop = new Properties();
@@ -25,7 +27,10 @@ public class KafkaProducerMain {
         prop.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         producer = new KafkaProducer<String, String>(prop);
     }
-
+    /** 
+     * send randomly generated event 
+     * @RUNBEFORE {@link KafkaProducerMain.initialize} 
+    */
     public static void sendEvent() {
 
         // generate EventJSon String
@@ -38,9 +43,11 @@ public class KafkaProducerMain {
         // send and flush
         producer.send(record);
         producer.flush();
-        producer.close();
     }
 
+    public static void finishProducer(){
+        producer.close();
+    }
     /** generates random string */
     private static String generateRandomSUString() {
         Random rnd = new Random();

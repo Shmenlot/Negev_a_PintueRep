@@ -15,6 +15,6 @@ public final class App {
         KafkaProducerMain.initialize();
         KafkaProducerMain.sendEvent();
         KafkaProducerMain.sendEvent();
-
+        KafkaProducerMain.finishProducer();
     }
 }
