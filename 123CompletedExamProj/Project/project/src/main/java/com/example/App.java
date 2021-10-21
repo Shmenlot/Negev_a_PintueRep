@@ -14,5 +14,7 @@ public final class App {
     public static void main(String[] args) {
         KafkaProducerMain.initialize();
         KafkaProducerMain.sendEvent();
+        KafkaProducerMain.sendEvent();
+
     }
 }
