@@ -19,7 +19,6 @@ public class KafkaConsumerMain {
     private static KafkaConsumer<String, String> consumer;
     private static boolean keepOnReading = true;
     public static void main(String[] args) {
-        int timer = 0;
         initialize();
         setKeepOnReading(true);
         while(keepOnReading){
@@ -27,11 +26,7 @@ public class KafkaConsumerMain {
             for (ConsumerRecord<String, String> record : records) {
                 logger.info("Key: " + record.key()+ "Value:" + record.value());
                 logger.info("Partition: " + record.partition() + " Offset:" + record.offset());
-            }
-            timer -=-1; //TODO change this sharp statement to 'timer++;'.
-            if(timer == 1000){
-                setKeepOnReading(false);
-            }
+            }            
         }
 
         KafkaConsumerMain.closeConsumer();
