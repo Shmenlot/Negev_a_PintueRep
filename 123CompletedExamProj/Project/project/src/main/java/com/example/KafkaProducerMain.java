@@ -2,6 +2,7 @@ package com.example;
 
 import java.util.Properties;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
@@ -19,6 +20,23 @@ public class KafkaProducerMain {
 
     //TODO: add main that send every second
     //TODO: after adding main change all methods to private
+    public static void main(String[] args) {
+
+        boolean keepOnReading = true;
+        
+        KafkaProducerMain.initialize();
+        while(keepOnReading){
+            try {
+                TimeUnit.SECONDS.sleep(1);
+            } catch (InterruptedException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            KafkaProducerMain.sendEvent();
+        }
+        KafkaProducerMain.finishProducer();
+
+    }
     public static void initialize() {
         // create producer properties
         prop = new Properties();
@@ -31,7 +49,7 @@ public class KafkaProducerMain {
      * send randomly generated event 
      * @RUNBEFORE {@link KafkaProducerMain.initialize} 
     */
-    public static void sendEvent() {
+    private static void sendEvent() {
 
         // generate EventJSon String
         Event event = generateRandomEvent();
@@ -45,7 +63,8 @@ public class KafkaProducerMain {
         producer.flush();
     }
 
-    public static void finishProducer(){
+    /* close producer. */
+    private static void finishProducer(){
         producer.close();
     }
     /** generates random string */
