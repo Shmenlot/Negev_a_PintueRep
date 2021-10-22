@@ -25,10 +25,10 @@ public class KafkaProducerMain {
 
     public static void main(String[] args) {
 
-        boolean keepOnReading = true;
-
+        boolean keepOnSending = true;
+        
         KafkaProducerMain.initialize();
-        while (keepOnReading) {
+        while(keepOnSending){
             try {
                 TimeUnit.SECONDS.sleep(1);
             } catch (InterruptedException e) {
@@ -39,7 +39,7 @@ public class KafkaProducerMain {
         KafkaProducerMain.finishProducer();
 
     }
-
+    
     public static void initialize() {
         // create producer properties
         prop = new Properties();
@@ -93,7 +93,7 @@ public class KafkaProducerMain {
         for (int i = 0; i < length; i++) {
             switch (rnd.nextInt(RAND_STR_OPT)) {
             case 0:
-                str += " ";
+                str += "-";
                 break;
             case 1:
                 str += "ඞ";
@@ -120,6 +120,6 @@ public class KafkaProducerMain {
      * @return the random event that has been generated
      */
     private static Event generateRandomEvent() {
-        return Event.create(() -> generateRandomSUString(), () -> MAX_METRIC_VAL);
+        return Event.create(() -> generateRandomSUString(), () -> generateRandMetricVal());
     }
 }
