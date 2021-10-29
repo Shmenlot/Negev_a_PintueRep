@@ -2,24 +2,30 @@ package com.example;
 
 
 import com.mongodb.BasicDBObject;
+import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
-import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoDatabase;
 
-import org.bson.Document;
 
 public class MongoDB {
     public static MongoClient mongoClient;
     public static MongoDatabase database;
-    public static MongoCollection<Document> test;
+    public static DBCollection test;
     public static void main(String[] args) {
         // establish conection with database.
         mongoClient = MongoClients.create("mongodb://localhost:27017");
         database = mongoClient.getDatabase("FirstDB");
-        test = database.getCollection("test");
-        
+        // create collection
+        test = (DBCollection) database.getCollection("test");
+        TestObject testObj = new TestObject("69", 43, 12);
+        test.insert(convert(testObj));
+        DBObject query = new BasicDBObject();
+        DBCursor cursor = test.find(query);
+        System.out.println(cursor.one());
+
     }
 
     public static DBObject convert(TestObject testObj){
