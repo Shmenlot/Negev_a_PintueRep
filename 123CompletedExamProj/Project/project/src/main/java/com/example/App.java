@@ -1,6 +1,5 @@
 package com.example;
 
-import java.util.concurrent.TimeUnit;
 
 /**
  * Hello world!
