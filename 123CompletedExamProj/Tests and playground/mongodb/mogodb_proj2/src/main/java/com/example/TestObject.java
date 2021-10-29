@@ -11,7 +11,7 @@ public class TestObject {
         this.timer = timer;
         this.xp = xp;
     }
-    //! getterim veSetterim
+    //! getters and setters
     public String getMemberID() {
         return this.memberID;
     }
@@ -35,6 +35,6 @@ public class TestObject {
     public void setXp(int xp) {
         this.xp = xp;
     }
-    //!end
+    //! End of getters and setters
 
 }
