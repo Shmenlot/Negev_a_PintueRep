@@ -22,7 +22,7 @@ public class KafkaProducerMain {
     private static Properties prop;
     private static KafkaProducer<String, String> producer;
     private static Logger log;
-
+    
     public static void main(String[] args) {
 
         boolean keepOnSending = true;
