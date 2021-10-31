@@ -9,6 +9,8 @@ import java.util.Properties;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.util.JSON;
@@ -40,15 +42,16 @@ public class KafkaConsumerMain {
             setKeepOnReading(true);
 
             while (keepOnReading) {
-                //get from kafka
+                // get from kafka
                 ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
                 for (ConsumerRecord<String, String> record : records) {
                     logger.info("Key: " + record.key() + "Value:" + record.value());
                     logger.info("Partition: " + record.partition() + " Offset:" + record.offset());
                     ObjectMapper mapper = new ObjectMapper();
-                    //put in mongogdb
+                    // put in mongogdb
                     BasicDBObject eventdbobj = mapper.readValue(record.value(), BasicDBObject.class);
                     eventsCollection.insert(eventdbobj);
+
                 }
             }
         } catch (UnknownHostException e) {
@@ -62,6 +65,13 @@ public class KafkaConsumerMain {
         }
 
         KafkaConsumerMain.closeConsumer();
+    }
+
+    public static void test() {
+        DBObject query = new BasicDBObject("XP", 69);
+        String jso = "\"dt\" : {\"$gte\" : ISODate(\"2014-07-02T00:00:00Z\"), \"$lt\" : ISODate(\"2030-07-03T00:00:00Z\") }";
+        DBCursor cursor = eventsCollection.find(query);
+        System.out.println(cursor.one());
     }
 
     private static void initialize() throws UnknownHostException {

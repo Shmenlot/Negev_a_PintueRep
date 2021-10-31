@@ -26,6 +26,7 @@ public class MongoDB {
         DBCursor cursor = test.find(query);
         System.out.println(cursor.one());
 
+        
     }
 
     public static DBObject convert(TestObject testObj){
