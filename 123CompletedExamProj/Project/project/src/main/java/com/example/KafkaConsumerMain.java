@@ -4,11 +4,15 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.time.Duration;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
+import com.google.gson.Gson;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
+import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.util.JSON;
@@ -43,21 +47,21 @@ public class KafkaConsumerMain {
                 //get from kafka
                 ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
                 for (ConsumerRecord<String, String> record : records) {
+                    Gson g = new Gson();
                     logger.info("Key: " + record.key() + "Value:" + record.value());
                     logger.info("Partition: " + record.partition() + " Offset:" + record.offset());
-                    ObjectMapper mapper = new ObjectMapper();
-                    //put in mongogdb
-                    BasicDBObject eventdbobj = mapper.readValue(record.value(), BasicDBObject.class);
-                    eventsCollection.insert(eventdbobj);
+                    Event currEvent = g.fromJson(record.value(), Event.class);
+                    Map<String, Object> curEventMap = new HashMap<>();
+                    curEventMap.put("reportId", currEvent.getReportId());
+                    curEventMap.put("timestamp", currEvent.getTimestamp());
+                    curEventMap.put("metricId", currEvent.getMetricId());
+                    curEventMap.put("metricValue", currEvent.getMetricValue());
+                    curEventMap.put("message", currEvent.getMessage());
+                    BasicDBObject eventObj = new BasicDBObject(curEventMap);
+                    eventsCollection.insert(eventObj);
                 }
             }
         } catch (UnknownHostException e) {
-            e.printStackTrace();
-        } catch (JsonParseException e) {
-            e.printStackTrace();
-        } catch (JsonMappingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
             e.printStackTrace();
         }
 
