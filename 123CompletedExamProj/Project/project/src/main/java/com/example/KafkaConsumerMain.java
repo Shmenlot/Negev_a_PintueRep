@@ -68,10 +68,25 @@ public class KafkaConsumerMain {
     }
 
     public static void test() {
-        DBObject query = new BasicDBObject("XP", 69);
-        String jso = "\"dt\" : {\"$gte\" : ISODate(\"2014-07-02T00:00:00Z\"), \"$lt\" : ISODate(\"2030-07-03T00:00:00Z\") }";
-        DBCursor cursor = eventsCollection.find(query);
-        System.out.println(cursor.one());
+        try {
+            initialize();
+
+            String jso = "\"timestamp\" : {\"$gte\" : ISODate(\"2021-10-31T00:00:00Z\"), \"$lt\" : ISODate(\"2030-07-03T00:00:00Z\") }";
+            ObjectMapper mapper = new ObjectMapper();
+            BasicDBObject query = mapper.readValue(jso, BasicDBObject.class);
+            DBCursor cursor = eventsCollection.find(query);
+            System.out.println(cursor.one());
+        } catch (JsonParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (JsonMappingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
     }
 
     private static void initialize() throws UnknownHostException {
