@@ -48,10 +48,9 @@ public class KafkaConsumerMain {
                 // get from kafka
                 ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
                 for (ConsumerRecord<String, String> record : records) {
-                    Gson g = new Gson();
                     logger.info("Key: " + record.key() + "Value:" + record.value());
                     logger.info("Partition: " + record.partition() + " Offset:" + record.offset());
-                    Event currEvent = g.fromJson(record.value(), Event.class);
+                    Event currEvent = Event.createFromJson(record.value());
                     Map<String, Object> curEventMap = new HashMap<>();
                     curEventMap.put("reportId", currEvent.getReportId());
                     curEventMap.put("timestamp", currEvent.getTimestamp());
