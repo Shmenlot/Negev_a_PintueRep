@@ -86,6 +86,13 @@
     <artifactId>mongo-java-driver</artifactId>
     <version>2.12.3</version>
   </dependency>
+  <!-- https://mvnrepository.com/artifact/redis.clients/jedis -->
+<dependency>
+  <groupId>redis.clients</groupId>
+  <artifactId>jedis</artifactId>
+  <version>3.7.0</version>
+</dependency>
+
   </dependencies> <!-- end of dependencies -->
   <build>
     <plugins>
