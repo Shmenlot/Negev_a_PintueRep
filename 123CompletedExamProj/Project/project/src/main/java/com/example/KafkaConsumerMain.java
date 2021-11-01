@@ -25,11 +25,13 @@ import org.testcontainers.shaded.com.fasterxml.jackson.databind.JsonMappingExcep
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 public class KafkaConsumerMain {
+    // kafka stuff.
     private static String groupID;
     private static Logger logger;
     private static Properties properties;
     private static KafkaConsumer<String, String> consumer;
     private static boolean keepOnReading = true;
+    // mongo stuff.
     private static MongoClient mongoClient;
     private static DB database;
     private static DBCollection eventsCollection;
@@ -64,8 +66,8 @@ public class KafkaConsumerMain {
         KafkaConsumerMain.closeConsumer();
     }
 
-    private static void initialize() throws UnknownHostException {
-        // initialize variables
+    private static void initialize() throws UnknownHostException{
+        // initialize kafka consumer.
         logger = LoggerFactory.getLogger(KafkaConsumerMain.class.getName());
         properties = new Properties();
         groupID = "ABC";
