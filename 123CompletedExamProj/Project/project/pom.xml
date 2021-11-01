@@ -40,11 +40,15 @@
       <artifactId>slf4j-api</artifactId>
       <version>1.7.12</version>
     </dependency>
-    <dependency>
+    <!-- <dependency>
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
       <version>1.7.12</version>
-    </dependency>
+
+      
+      
+    </dependency> -->
+    
     <!-- https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients -->
     <dependency>
       <groupId>org.apache.kafka</groupId>
@@ -91,6 +95,7 @@
   <groupId>redis.clients</groupId>
   <artifactId>jedis</artifactId>
   <version>3.7.0</version>
+  
 </dependency>
 
   </dependencies> <!-- end of dependencies -->
@@ -250,4 +255,5 @@
       </build>
     </profile>
   </profiles>
+  
 </project>
