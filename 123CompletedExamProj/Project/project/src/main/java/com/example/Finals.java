@@ -9,4 +9,5 @@ public interface Finals {
     public final static String MONGO_URL = "mongodb://localhost:27017";
     public final static String MONGO_DB_NAME = "FirstDataBase";
     public final static String MONGO_COLLECTION_NAME = "Events";
+    public final static String MONGO_METADATA_NAME = "MetaData";
 }
