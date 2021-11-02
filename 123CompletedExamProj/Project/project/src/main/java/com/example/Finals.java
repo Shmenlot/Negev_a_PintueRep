@@ -10,4 +10,9 @@ public interface Finals {
     public final static String MONGO_DB_NAME = "FirstDataBase";
     public final static String MONGO_COLLECTION_NAME = "Events";
     public final static String MONGO_METADATA_NAME = "MetaData";
-}
+
+    //metadata keys
+    public final static String NEXT_REPORT_ID = "nextReporterID";
+    public final static String NEXT_METRIC_ID = "nextMetricID";
+    
+} 

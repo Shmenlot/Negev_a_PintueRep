@@ -24,7 +24,7 @@ import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonParseException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.JsonMappingException;
 import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
-public class KafkaConsumerMain {
+public class KafkaConsumerMain implements Finals{
     // kafka stuff.
     private static String groupID;
     private static Logger logger;

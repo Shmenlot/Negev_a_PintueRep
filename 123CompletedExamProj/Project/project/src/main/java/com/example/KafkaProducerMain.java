@@ -24,6 +24,7 @@ public class KafkaProducerMain {
         boolean keepOnSending = true;
         
         KafkaProducerMain.initialize();
+        EventFactory.initialize();
         while(keepOnSending){
             try {
                 TimeUnit.SECONDS.sleep(1);

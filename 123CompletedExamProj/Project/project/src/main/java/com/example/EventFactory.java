@@ -13,18 +13,18 @@ import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 
-public class EventFactory {
+public class EventFactory implements Finals {
     // Finals
     final static int MAX_MASSAGE_SIZE = 100;
     final static int RAND_STR_OPT = 4;
     final static int MAX_METRIC_VAL = 1000;
 
     // statics
-    private static int nextReporterID;
+    private static int nextReportID;
     private static int nextMetricID;
 
     // for saving metadata in mongo
-    //keys in the mongo metadata : 
+    //keys in the mongo metadata : nextReporterID,nextMetricID
     private static MongoClient mongoClient;
     private static DB database;
     private static DBCollection metaDataCollection;
@@ -38,34 +38,52 @@ public class EventFactory {
      * @return new generated dat
      */
     public static Event create() {
-        int nReportId = nextReporterID;
+        int nReportId = nextReportID;
         int nMetricId = nextMetricID;
         Date nTimeStamp = new Date(System.currentTimeMillis());
         int nMetricValue = generateRandMetricVal();
-        nextReporterID++;
+        nextReportID++;
         nextMetricID++;
+        //empty query get first
+        DBObject query = new BasicDBObject();
+        
+        //create dbobject to update
+        BasicDBObject updateNextReportID = new BasicDBObject();
+        BasicDBObject updateNextMetricID = new BasicDBObject();
+        
+        updateNextReportID.append("$set", new BasicDBObject(NEXT_REPORT_ID,nextReportID));
+        updateNextMetricID.append("$set",new BasicDBObject(NEXT_METRIC_ID, nextMetricID));
+
+        metaDataCollection.update(query, updateNextReportID);
+        metaDataCollection.update(query, updateNextMetricID);
         return new Event(nReportId, nTimeStamp, nMetricId, nMetricValue, generateRandomSUString());
     }
 
     public static void initialize() {
-        // mongo stuff
+       
         try {
+             // mongo stuff
             mongoClient = new MongoClient(new MongoClientURI(Finals.MONGO_URL));
             // create database.
             database = mongoClient.getDB(Finals.MONGO_DB_NAME);
             // create collection
             metaDataCollection = database.getCollection(Finals.MONGO_METADATA_NAME);
             DBObject query = new BasicDBObject();
+            //read from mongo 
             DBCursor cursor = metaDataCollection.find(query);
+            DBObject metadata = cursor.one();
             //if no messege has been generated start id from zero
-            if (cursor.one() == null) {
-                nextReporterID = 0;
+            if (metadata == null) {
+                nextReportID = 0;
                 nextMetricID = 0;
+                
+                BasicDBObject newMetadata = new BasicDBObject("");
+                metaDataCollection.insert(arr)
             }
             //if some messages has been generated start id by the last id
             else {
-                nextReporterID = (Integer)(cursor.one().get("nextReporterID"));
-                nextMetricID = (Integer)(cursor.one().get("nextMetricID"));
+                nextReportID = (Integer)(metadata.get("nextReporterID"));
+                nextMetricID = (Integer)(metadata.get("nextMetricID"));
             }
         } catch (UnknownHostException e) {
             e.printStackTrace();
