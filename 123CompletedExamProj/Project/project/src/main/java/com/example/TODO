@@ -1,2 +1,5 @@
-remove strings represent keys
-remove finals.
+seprate event to eventlogger and event
+change event statics so it will be resilient
+add threads
+make mongo updating easier
+check todos and delete trash
