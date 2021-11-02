@@ -1,2 +1,2 @@
-seprate event to eventlogger and event
-change event statics so it will be resilient
+remove strings represent keys
+remove finals.

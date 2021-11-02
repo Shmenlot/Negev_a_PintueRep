@@ -3,7 +3,7 @@ package com.example;
 public interface Finals {
     //kafka
     public final static String BOOTSTRAP_SERVER = "localhost:9092";
-    public final static String TOPIC = "sussy_baka";
+    public final static String TOPIC = "sussy_baka3";
     
     //mongodb
     public final static String MONGO_URL = "mongodb://localhost:27017";

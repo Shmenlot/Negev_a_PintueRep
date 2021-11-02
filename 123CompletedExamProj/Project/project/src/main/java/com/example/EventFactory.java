@@ -5,6 +5,7 @@ import java.sql.Date;
 import java.util.Random;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -94,7 +95,7 @@ public class EventFactory implements Finals {
      * Make Json String that represent the object
      */
     public static String toJson(Event event) {
-        Gson g = new Gson();
+        Gson g = new GsonBuilder().setDateFormat("MM dd, yyyy HH:mm:ss").create();
         return g.toJson(event);
     }
 
@@ -105,7 +106,7 @@ public class EventFactory implements Finals {
      * @return new event that was generated from json string
      */
     public static Event createFromJson(String json) {
-        Gson g = new Gson();
+        Gson g = new GsonBuilder().setDateFormat("MM dd, yyyy HH:mm:ss").create();
         return g.fromJson(json, Event.class);
     }
 
