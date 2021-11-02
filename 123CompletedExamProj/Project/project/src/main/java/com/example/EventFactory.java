@@ -20,10 +20,11 @@ public class EventFactory {
     final static int MAX_METRIC_VAL = 1000;
 
     // statics
-    private static int nextReporterID = 0;
-    private static int nextMetricID = 0;
+    private static int nextReporterID;
+    private static int nextMetricID;
 
     // for saving metadata in mongo
+    //keys in the mongo metadata : 
     private static MongoClient mongoClient;
     private static DB database;
     private static DBCollection metaDataCollection;
@@ -53,10 +54,19 @@ public class EventFactory {
             // create database.
             database = mongoClient.getDB(Finals.MONGO_DB_NAME);
             // create collection
-            metaDataCollection = database.getCollection(Finals.MONGO_COLLECTION_NAME);
+            metaDataCollection = database.getCollection(Finals.MONGO_METADATA_NAME);
             DBObject query = new BasicDBObject();
             DBCursor cursor = metaDataCollection.find(query);
-            System.out.println(cursor.one());
+            //if no messege has been generated start id from zero
+            if (cursor.one() == null) {
+                nextReporterID = 0;
+                nextMetricID = 0;
+            }
+            //if some messages has been generated start id by the last id
+            else {
+                nextReporterID = (Integer)(cursor.one().get("nextReporterID"));
+                nextMetricID = (Integer)(cursor.one().get("nextMetricID"));
+            }
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }

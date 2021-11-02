@@ -14,6 +14,7 @@ public final class App {
      * @throws InterruptedException
      */
     public static void main(String[] args) throws InterruptedException {
+        EventFactory.initialize();
 
     }
 }
