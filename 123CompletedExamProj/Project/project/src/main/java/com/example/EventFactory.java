@@ -67,7 +67,7 @@ public class EventFactory implements Finals {
             // create database.
             database = mongoClient.getDB(Finals.MONGO_DB_NAME);
             // create collection
-            metaDataCollection = database.getCollection(Finals.MONGO_METADATA_NAME);
+            metaDataCollection = database.getCollection(Finals.MONGO_META_DATA_COLLECTION);
             DBObject query = new BasicDBObject();
             //read from mongo 
             DBCursor cursor = metaDataCollection.find(query);

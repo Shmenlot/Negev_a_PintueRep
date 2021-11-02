@@ -113,7 +113,7 @@ public class KafkaConsumerMain implements Finals{
         // create database.
         database = mongoClient.getDB(Finals.MONGO_DB_NAME);
         // create collection
-        eventsCollection = database.getCollection(Finals.MONGO_COLLECTION_NAME);
+        eventsCollection = database.getCollection(Finals.MONGO_EVENTS_COLLECTION);
 
     }
 
