@@ -2,6 +2,7 @@ package com.example;
 
 
 import java.net.UnknownHostException;
+import java.util.Date;
 
 import com.mongodb.*;
 
@@ -22,10 +23,11 @@ public class MongoDB {
         test.insert(convert(testObj));
 
         // find object by the amount of xp.
-        DBObject query = new BasicDBObject("XP", 69);
+        DBObject query = new BasicDBObject("XP", 12);
         DBCursor cursor = test.find(query);
         System.out.println(cursor.one());
 
+        
     }
 
     public static DBObject convert(TestObject testObj){

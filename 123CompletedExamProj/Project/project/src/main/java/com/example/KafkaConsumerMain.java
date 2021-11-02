@@ -4,11 +4,16 @@ import java.io.IOException;
 import java.net.UnknownHostException;
 import java.time.Duration;
 import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
 
+import com.google.gson.Gson;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
+import com.mongodb.DBCursor;
+import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 import com.mongodb.util.JSON;
@@ -42,28 +47,49 @@ public class KafkaConsumerMain implements Finals{
             setKeepOnReading(true);
 
             while (keepOnReading) {
-                //get from kafka
+                // get from kafka
                 ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
                 for (ConsumerRecord<String, String> record : records) {
                     logger.info("Key: " + record.key() + "Value:" + record.value());
                     logger.info("Partition: " + record.partition() + " Offset:" + record.offset());
-                    ObjectMapper mapper = new ObjectMapper();
-                    //put in mongogdb
-                    BasicDBObject eventdbobj = mapper.readValue(record.value(), BasicDBObject.class);
-                    eventsCollection.insert(eventdbobj);
+                    Event currEvent = Event.createFromJson(record.value());
+                    Map<String, Object> curEventMap = new HashMap<>();
+                    curEventMap.put("reportId", currEvent.getReportId());
+                    curEventMap.put("timestamp", currEvent.getTimestamp());
+                    curEventMap.put("metricId", currEvent.getMetricId());
+                    curEventMap.put("metricValue", currEvent.getMetricValue());
+                    curEventMap.put("message", currEvent.getMessage());
+                    BasicDBObject eventObj = new BasicDBObject(curEventMap);
+                    eventsCollection.insert(eventObj);
                 }
             }
         } catch (UnknownHostException e) {
             e.printStackTrace();
-        } catch (JsonParseException e) {
-            e.printStackTrace();
-        } catch (JsonMappingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
 
         KafkaConsumerMain.closeConsumer();
+    }
+
+    public static void test() {
+        try {
+            initialize();
+
+            String jso = "\"timestamp\" : {\"$gte\" : ISODate(\"2021-10-31T00:00:00Z\"), \"$lt\" : ISODate(\"2030-07-03T00:00:00Z\") }";
+            ObjectMapper mapper = new ObjectMapper();
+            BasicDBObject query = mapper.readValue(jso, BasicDBObject.class);
+            DBCursor cursor = eventsCollection.find(query);
+            System.out.println(cursor.one());
+        } catch (JsonParseException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (JsonMappingException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
     }
 
     private static void initialize() throws UnknownHostException{
