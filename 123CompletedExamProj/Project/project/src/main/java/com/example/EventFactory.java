@@ -77,8 +77,8 @@ public class EventFactory implements Finals {
                 nextReportID = 0;
                 nextMetricID = 0;
                 
-                BasicDBObject newMetadata = new BasicDBObject("");
-                metaDataCollection.insert(arr)
+                BasicDBObject newMetadata = new BasicDBObject(NEXT_REPORT_ID,0).append(NEXT_REPORT_ID, 0);
+                metaDataCollection.insert(newMetadata);
             }
             //if some messages has been generated start id by the last id
             else {

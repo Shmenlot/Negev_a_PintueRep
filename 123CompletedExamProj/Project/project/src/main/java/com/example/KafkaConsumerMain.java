@@ -52,7 +52,7 @@ public class KafkaConsumerMain implements Finals{
                 for (ConsumerRecord<String, String> record : records) {
                     logger.info("Key: " + record.key() + "Value:" + record.value());
                     logger.info("Partition: " + record.partition() + " Offset:" + record.offset());
-                    Event currEvent = Event.createFromJson(record.value());
+                    Event currEvent = EventFactory.createFromJson(record.value());
                     Map<String, Object> curEventMap = new HashMap<>();
                     curEventMap.put("reportId", currEvent.getReportId());
                     curEventMap.put("timestamp", currEvent.getTimestamp());
