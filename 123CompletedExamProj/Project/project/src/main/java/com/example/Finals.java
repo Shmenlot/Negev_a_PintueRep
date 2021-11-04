@@ -1,5 +1,8 @@
 package com.example;
 
+import java.sql.Date;
+
+
 public interface Finals {
     //kafka
     public final static String BOOTSTRAP_SERVER = "localhost:9092";
@@ -20,6 +23,6 @@ public interface Finals {
     public final static int DELAY_BETWEEN_EVENTS_CREATED = 1;
     public final static int DELAY_BETWEEN_MOVING_TO_REDIS = 30;
     
-    public final static String MAX_DATE = "3000-07-03T00:00:00Z";
+
 
 } 
