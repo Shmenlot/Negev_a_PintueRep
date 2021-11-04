@@ -1,5 +1,5 @@
 seprate event to eventlogger and event
-change event statics so it will be resilient
 add threads
 make mongo updating easier
 check todos and delete trash
+make query more readable mongoredis
