@@ -94,10 +94,15 @@ public class MongoRedisMain implements Finals {
      */
     private static BasicDBObject toFromDateQuery(Date d) {
 
-       return new BasicDBObject("timestamp",new BasicDBObject("$gt", d));
+        
+    //    return new BasicDBObject("timestamp",new BasicDBObject("$gte", d));
+       return new BasicDBObject("timestamp",d);
+
     }
     public static void test() {
-        DBCursor cursor = metaDataCollection.find(toFromDateQuery(new Date(System.currentTimeMillis() - 1000*60*60)));
+        System.out.println(toFromDateQuery(new Date(1636046482000L)).toString());
+        DBCursor cursor = eventsCollection.find(toFromDateQuery(new Date(11636046482000L)));
+        
         System.out.println(cursor.one());
     }
 }
