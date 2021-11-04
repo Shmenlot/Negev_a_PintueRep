@@ -40,7 +40,7 @@ public class MongoRedisMain implements Finals {
                 DBObject metadata = tempCursor.one();
                 Date lastRedisTime = (Date) metadata.get(LAST_REDIS_TIME_STAMP);
                 // read from the current time stamp
-                
+
                 BasicDBObject timeQuery = toFromDateQuery(lastRedisTime);
                 DBCursor timeCursor = eventsCollection.find(timeQuery);
                 while (timeCursor.hasNext()) {
@@ -51,14 +51,7 @@ public class MongoRedisMain implements Finals {
         } catch (InterruptedException e) {
             e.printStackTrace();
 
-        } catch (JsonParseException e) {
-            e.printStackTrace();
-        } catch (JsonMappingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
         }
-
     }
 
     public static void initialize() {
@@ -99,30 +92,17 @@ public class MongoRedisMain implements Finals {
      * @throws JsonMappingException
      * @throws JsonParseException
      */
-    private static BasicDBObject toFromDateQuery(Date d) throws JsonParseException, JsonMappingException, IOException {
+    private static BasicDBObject toFromDateQuery(Date d) {
 
-        // make format match (adding zeros if nedded)
-        String year = "";
-        if (d.getYear() / 10 < 1) {
-            year = "0";
-        }
-        if (d.getYear() / 100 < 1) {
-            year = year + "0";
-        }
-        if (d.getYear() / 1000 < 1) {
-            year = year + "0";
-        }
-        year = year + d.getYear();
+        
+       return new BasicDBObject("timestamp",new BasicDBObject("$gt", d));
 
-        String month = (d.getMonth() / 10 < 1) ? "0" + d.getMonth() : Integer.toString(d.getMonth());
-        String day = (d.getDay() / 10 < 1) ? "0" + d.getDay() : Integer.toString(d.getDay());
-        String hour = (d.getMinutes() / 10 < 1) ? "0" + d.getHours() : Integer.toString(d.getHours());
-        String minute = (d.getMinutes() / 10 < 1) ? "0" + d.getMinutes() : Integer.toString(d.getMinutes());
-        String second = (d.getSeconds() / 10 < 1) ? "0" + d.getSeconds() : Integer.toString(d.getSeconds());
-        String isoFormat =  year + "-" + month + "-" + day + "T" + hour + ":" + minute + ":" + second + "Z";
-        String strQuery = "\"timestamp\" : {\"$gte\" : ISODate(\"" + isoFormat
-                        + "\"), \"$lt\" : ISODate(\"" + MAX_DATE + "\") }";
-        ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(strQuery, BasicDBObject.class);
+    }
+    public static void test() {
+        initialize();
+        System.out.println(toFromDateQuery(new Date(1636040482000L)).toString());
+        DBCursor cursor = eventsCollection.find(toFromDateQuery(new Date(1636040482000L)));
+        
+        System.out.println(cursor.one());
     }
 }

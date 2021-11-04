@@ -59,6 +59,7 @@ public class KafkaConsumerMain implements Finals{
                     curEventMap.put("metricId", currEvent.getMetricId());
                     curEventMap.put("metricValue", currEvent.getMetricValue());
                     curEventMap.put("message", currEvent.getMessage());
+                    System.out.println(currEvent.getTimestamp().getTime());
                     BasicDBObject eventObj = new BasicDBObject(curEventMap);
                     eventsCollection.insert(eventObj);
                 }
