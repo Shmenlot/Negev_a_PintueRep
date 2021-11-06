@@ -2,8 +2,7 @@ package com.example;
 
 import java.io.IOException;
 import java.net.UnknownHostException;
-import java.sql.Date;
-import java.util.Calendar;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 import com.fasterxml.jackson.core.JsonParseException;
@@ -47,14 +46,16 @@ public class MongoRedisMain implements Finals {
                 
                 BasicDBObject timeQuery = toFromDateQuery(lastRedisTime);
                 DBCursor timeCursor = eventsCollection.find(timeQuery);
-                String currentTimeStamp, currentReporterID;
+                String currentTimeStamp, currentReportID;
                 timeCursor.sort(new BasicDBObject(TIMESTAMP_ID, 1));
                 while (timeCursor.hasNext()) {
                     DBObject currentEvent = timeCursor.next();
-                    currentReporterID = Integer.toString((Integer)currentEvent.get(REPORTERID_ID));
-                    currentTimeStamp = ((Date)timeCursor.one().get(TIMESTAMP_ID)).toString();
-                    chashud.set(currentReporterID + ":" + currentTimeStamp, currentEvent.toString());
-                    
+                    currentReportID = Integer.toString((Integer)currentEvent.get(REPORTID_ID));
+                    currentTimeStamp = ((Date)timeCursor.one().get(TIMESTAMP_ID)).toInstant().toString();
+                    chashud.set(currentReportID + ":" + currentTimeStamp, currentEvent.toString());
+                    System.out.println(currentReportID + ":" + currentTimeStamp);
+                    System.out.println(currentEvent.toString());
+                    System.out.println();
                     BasicDBObject setLastRedisTime = new BasicDBObject();
                     setLastRedisTime.append("$set", new BasicDBObject(LAST_REDIS_TIME_STAMP, currentEvent.get(TIMESTAMP_ID)));
                     metaDataCollection.update(new BasicDBObject(), setLastRedisTime);

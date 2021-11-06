@@ -1,7 +1,7 @@
 package com.example;
 
 import java.net.UnknownHostException;
-import java.sql.Date;
+import java.util.Date;
 import java.util.Random;
 
 import com.google.gson.Gson;
@@ -25,7 +25,7 @@ public class EventFactory implements Finals {
     private static int nextMetricID;
 
     // for saving metadata in mongo
-    //keys in the mongo metadata : nextReporterID,nextMetricID
+    //keys in the mongo metadata : nextReportID,nextMetricID
     private static MongoClient mongoClient;
     private static DB database;
     private static DBCollection metaDataCollection;
@@ -83,7 +83,7 @@ public class EventFactory implements Finals {
             }
             //if some messages have been generated start id by the last id
             else {
-                nextReportID = (Integer)(metadata.get("nextReporterID"));
+                nextReportID = (Integer)(metadata.get("nextReportID"));
                 nextMetricID = (Integer)(metadata.get("nextMetricID"));
             }
         } catch (UnknownHostException e) {
@@ -121,11 +121,11 @@ public class EventFactory implements Finals {
                 str += "-";
                 break;
             case 1:
-                str += "ඞ";
+                str += "a";
             case 2:
-                str += "🗡";
+                str += "b";
             case 3:
-                str += "🔫";
+                str += "c";
             default:
                 break;
             }
