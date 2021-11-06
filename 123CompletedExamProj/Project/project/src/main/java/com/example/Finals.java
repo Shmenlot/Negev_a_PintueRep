@@ -6,7 +6,7 @@ public interface Finals {
      * in it are the sever and topic names.
      */
     public final static String BOOTSTRAP_SERVER = "localhost:9092";
-    public final static String TOPIC = "sussy_baka6";
+    public final static String TOPIC = "lastTopic";
     
     /**
      * these are the mongoDB Finals
