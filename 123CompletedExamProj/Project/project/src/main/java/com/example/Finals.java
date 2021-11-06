@@ -6,14 +6,14 @@ public interface Finals {
      * in it are the sever and topic names.
      */
     public final static String BOOTSTRAP_SERVER = "localhost:9092";
-    public final static String TOPIC = "sussy_baka6";
+    public final static String TOPIC = "lastTopic1";
     
     /**
      * these are the mongoDB Finals
      * in here we save the connection, collection and db names.
      */
     public final static String MONGO_URL = "mongodb://localhost:27017";
-    public final static String MONGO_DB_NAME = "DataBase1";
+    public final static String MONGO_DB_NAME = "DataBase3";
     public final static String MONGO_EVENTS_COLLECTION = "Events";
     public final static String MONGO_META_DATA_COLLECTION = "MetaData";
 
@@ -24,7 +24,7 @@ public interface Finals {
 
     //time units
     public final static int DELAY_BETWEEN_EVENTS_CREATED = 1;
-    public final static int DELAY_BETWEEN_MOVING_TO_REDIS = 30;
+    public final static int DELAY_BETWEEN_MOVING_TO_REDIS = 10;
     
     // Events keys.
     public final static String REPORTID_ID = "reportId";

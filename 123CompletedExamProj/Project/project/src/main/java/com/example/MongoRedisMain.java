@@ -27,56 +27,66 @@ public class MongoRedisMain extends Thread implements Finals {
     private static Jedis chashud;
 
     public static void main(String[] args) {
-        MongoRedisMain mrm = new MongoRedisMain();
+        int i = 0;
         while (true) {
+            MongoRedisMain mrm = new MongoRedisMain();
+            System.out.println("Iteration " + i);
             mrm.start();
-            while (mrm.isAlive()) {  
+            while (mrm.isAlive()) {
             }
             try {
                 TimeUnit.SECONDS.sleep(DELAY_BETWEEN_MOVING_TO_REDIS);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            i++;
         }
     }
+
     @Override
     public void run() {
         // Jedis j = new Jedis("localhost", 6379);
         // j.set("Poo-Poo", "Pretty flyu for a wifi");
-        
-        initialize();
 
-        // read "redis lastest timestamp" mongo metadata collection.
-        // empty query get first
-        DBObject tempQuery = new BasicDBObject();
+        if (initialize()) {
 
-        DBCursor tempCursor = metaDataCollection.find(tempQuery);
-        DBObject metadata = tempCursor.one();
-        Date lastRedisTime = (Date) metadata.get(LAST_REDIS_TIME_STAMP);// read from mongo
+            // read "redis lastest timestamp" mongo metadata collection.
+            // empty query get first
+            DBObject tempQuery = new BasicDBObject();
 
-        // read from the current time stamp
+            DBCursor tempCursor = metaDataCollection.find(tempQuery);
+            DBObject metadata = tempCursor.one();
+            Date lastRedisTime = (Date) metadata.get(LAST_REDIS_TIME_STAMP);// read from mongo
 
-        BasicDBObject timeQuery = toFromDateQuery(lastRedisTime);
-        DBCursor timeCursor = eventsCollection.find(timeQuery);
-        String currentTimeStamp, currentReportID;
-        timeCursor.sort(new BasicDBObject(TIMESTAMP_ID, 1));
-        while (timeCursor.hasNext()) {
-            DBObject currentEvent = timeCursor.next();
-            currentReportID = Integer.toString((Integer) currentEvent.get(REPORTID_ID));
-            currentTimeStamp = ((Date) timeCursor.one().get(TIMESTAMP_ID)).toInstant().toString();
-            chashud.set(currentReportID + ":" + currentTimeStamp, currentEvent.toString());
-            System.out.println(currentReportID + ":" + currentTimeStamp);
-            System.out.println(currentEvent.toString());
-            System.out.println();
-            BasicDBObject setLastRedisTime = new BasicDBObject();
-            setLastRedisTime.append("$set", new BasicDBObject(LAST_REDIS_TIME_STAMP, currentEvent.get(TIMESTAMP_ID)));
-            metaDataCollection.update(new BasicDBObject(), setLastRedisTime);
+            // read from the current time stamp
 
+            BasicDBObject timeQuery = toFromDateQuery(lastRedisTime);
+            DBCursor timeCursor = eventsCollection.find(timeQuery);
+            String currentTimeStamp, currentReportID;
+            timeCursor.sort(new BasicDBObject(TIMESTAMP_ID, 1));
+            while (timeCursor.hasNext()) {
+                DBObject currentEvent = timeCursor.next();
+                currentReportID = Integer.toString((Integer) currentEvent.get(REPORTID_ID));
+                currentTimeStamp = ((Date) timeCursor.one().get(TIMESTAMP_ID)).toInstant().toString();
+                chashud.set(currentReportID + ":" + currentTimeStamp, currentEvent.toString());
+                System.out.println(currentReportID + ":" + currentTimeStamp);
+                System.out.println(currentEvent.toString());
+                System.out.println();
+                BasicDBObject setLastRedisTime = new BasicDBObject();
+                setLastRedisTime.append("$set",
+                        new BasicDBObject(LAST_REDIS_TIME_STAMP, currentEvent.get(TIMESTAMP_ID)));
+                metaDataCollection.update(new BasicDBObject(), setLastRedisTime);
+
+            }
         }
 
     }
 
-    public static void initialize() {
+    /**
+     * 
+     * @return true if initalized correctly
+     */
+    public static boolean initialize() {
         // Redis stauff
         chashud = new Jedis(HOST, REDIS_PORT);
         // mongo stuff
@@ -95,6 +105,7 @@ public class MongoRedisMain extends Thread implements Finals {
             // if metadata wasent created there is error
             if (metadata == null) {
                 System.out.println("Error: MetaDataHasentBeenInitilaized");
+                return false;
             }
             // if metadata dosent contain time field add one
             else if (!metadata.containsField(LAST_REDIS_TIME_STAMP)) {
@@ -102,10 +113,10 @@ public class MongoRedisMain extends Thread implements Finals {
                 addTimeField.append("$set", new BasicDBObject(LAST_REDIS_TIME_STAMP, new Date(0)));
                 metaDataCollection.update(query, addTimeField);
             }
-
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
+        return true;
     }
 
     /**
