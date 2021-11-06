@@ -25,26 +25,28 @@ public class MongoRedisMain implements Finals {
     private static DBCollection eventsCollection;
 
     public static void main(String[] args) {
-        // Jedis j = new Jedis("localhost", 6379);
-        // j.set("Poo-Poo", "Pretty flyu for a wifi");
+        //// Jedis j = new Jedis("localhost", 6379);
+        //// j.set("Poo-Poo", "Pretty flyu for a wifi");
         try {
             boolean keepOnSending = true;
             initialize();
             while (keepOnSending) {
 
-                // read redis last time from mongo
+                // read "redis lastest timestamp" mongo metadata collection.
                 // empty query get first
                 DBObject tempQuery = new BasicDBObject();
-                // read from mongo
+                
                 DBCursor tempCursor = metaDataCollection.find(tempQuery);
                 DBObject metadata = tempCursor.one();
-                Date lastRedisTime = (Date) metadata.get(LAST_REDIS_TIME_STAMP);
-                // read from the current time stamp
+                Date lastRedisTime = (Date) metadata.get(LAST_REDIS_TIME_STAMP);// read from mongo
 
+                // read from the current time stamp
+                
                 BasicDBObject timeQuery = toFromDateQuery(lastRedisTime);
                 DBCursor timeCursor = eventsCollection.find(timeQuery);
                 while (timeCursor.hasNext()) {
-                    
+                    // why do we need this while?
+                    // shouldnt it just be an if?
                 }
                 TimeUnit.SECONDS.sleep(30);
             }

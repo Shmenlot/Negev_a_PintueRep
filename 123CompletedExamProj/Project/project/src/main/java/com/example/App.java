@@ -14,6 +14,6 @@ public final class App {
      * @throws InterruptedException
      */
     public static void main(String[] args) throws InterruptedException {
-        MongoRedisMain.test();
-    }
+        // prints "hello world".
+        System.out.println("hellow world");    }
 }

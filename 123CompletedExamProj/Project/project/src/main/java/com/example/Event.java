@@ -1,13 +1,14 @@
 package com.example;
 
 import java.util.Date;
-
+// this class is document template.
 public class Event {
+    // the values for the documents.
     private int reportId;
-    private Date timestamp;
+    private Date timestamp; //// generated from the Date class.
     private int metricId;
     private int metricValue;
-    private String message;
+    private String message;//// Randomly generated String.
     
 
     /**
@@ -26,6 +27,7 @@ public class Event {
         this.message = message;
     }
 
+    // getters.
     public int getReportId() {
         return this.reportId;
     }

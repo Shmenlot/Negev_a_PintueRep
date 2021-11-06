@@ -13,7 +13,7 @@ import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
-
+// This class is the initializer of "Event".
 public class EventFactory implements Finals {
     // Finals
     final static int MAX_MASSAGE_SIZE = 100;
@@ -81,7 +81,7 @@ public class EventFactory implements Finals {
                 BasicDBObject newMetadata = new BasicDBObject(NEXT_REPORT_ID,0).append(NEXT_REPORT_ID, 0);
                 metaDataCollection.insert(newMetadata);
             }
-            //if some messages has been generated start id by the last id
+            //if some messages have been generated start id by the last id
             else {
                 nextReportID = (Integer)(metadata.get("nextReporterID"));
                 nextMetricID = (Integer)(metadata.get("nextMetricID"));
