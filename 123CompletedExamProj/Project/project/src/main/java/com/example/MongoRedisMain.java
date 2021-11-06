@@ -28,11 +28,13 @@ public class MongoRedisMain extends Thread implements Finals {
 
     public static void main(String[] args) {
         int i = 0;
+        int k = 0;
         while (true) {
             MongoRedisMain mrm = new MongoRedisMain();
             System.out.println("Iteration " + i);
             mrm.start();
             while (mrm.isAlive()) {
+                System.out.println("hello world " + ++k);
             }
             try {
                 TimeUnit.SECONDS.sleep(DELAY_BETWEEN_MOVING_TO_REDIS);
