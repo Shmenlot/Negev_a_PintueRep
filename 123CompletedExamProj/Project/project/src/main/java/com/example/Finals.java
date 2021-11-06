@@ -1,11 +1,17 @@
 package com.example;
-
+// This interface is used to centralize the finals.
 public interface Finals {
-    //kafka
+    /**
+     * these are the kafka Finals
+     * in it are the sever and topic names.
+     */
     public final static String BOOTSTRAP_SERVER = "localhost:9092";
     public final static String TOPIC = "sussy_baka3";
     
-    //mongodb
+    /**
+     * these are the mongoDB Finals
+     * in here we save the connection, collection and db names.
+     */
     public final static String MONGO_URL = "mongodb://localhost:27017";
     public final static String MONGO_DB_NAME = "FirstDataBase";
     public final static String MONGO_EVENTS_COLLECTION = "Events";
