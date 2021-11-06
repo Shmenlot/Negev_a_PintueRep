@@ -17,16 +17,19 @@ import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 
+import redis.clients.jedis.Jedis;
+
 public class MongoRedisMain implements Finals {
 
     private static MongoClient mongoClient;
     private static DB database;
     private static DBCollection metaDataCollection;
     private static DBCollection eventsCollection;
+    private static Jedis chashud;
 
     public static void main(String[] args) {
-        //// Jedis j = new Jedis("localhost", 6379);
-        //// j.set("Poo-Poo", "Pretty flyu for a wifi");
+        // Jedis j = new Jedis("localhost", 6379);
+        // j.set("Poo-Poo", "Pretty flyu for a wifi");
         try {
             boolean keepOnSending = true;
             initialize();
@@ -44,7 +47,17 @@ public class MongoRedisMain implements Finals {
                 
                 BasicDBObject timeQuery = toFromDateQuery(lastRedisTime);
                 DBCursor timeCursor = eventsCollection.find(timeQuery);
+                String currentTimeStamp, currentReporterID;
+                timeCursor.sort(new BasicDBObject(TIMESTAMP_ID, 1));
                 while (timeCursor.hasNext()) {
+                    DBObject currentEvent = timeCursor.next();
+                    currentReporterID = Integer.toString((Integer)currentEvent.get(REPORTERID_ID));
+                    currentTimeStamp = ((Date)timeCursor.one().get(TIMESTAMP_ID)).toString();
+                    chashud.set(currentReporterID + ":" + currentTimeStamp, currentEvent.toString());
+                    
+                    BasicDBObject setLastRedisTime = new BasicDBObject();
+                    setLastRedisTime.append("$set", new BasicDBObject(LAST_REDIS_TIME_STAMP, currentEvent.get(TIMESTAMP_ID)));
+                    metaDataCollection.update(new BasicDBObject(), setLastRedisTime);
                     
                 }
                 TimeUnit.SECONDS.sleep(30);
@@ -56,6 +69,8 @@ public class MongoRedisMain implements Finals {
     }
 
     public static void initialize() {
+        // Redis stauff
+        chashud = new Jedis(HOST, REDIS_PORT);
         // mongo stuff
         try {
             mongoClient = new MongoClient(new MongoClientURI(Finals.MONGO_URL));

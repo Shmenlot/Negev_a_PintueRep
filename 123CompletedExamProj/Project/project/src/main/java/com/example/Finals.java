@@ -26,6 +26,12 @@ public interface Finals {
     public final static int DELAY_BETWEEN_EVENTS_CREATED = 1;
     public final static int DELAY_BETWEEN_MOVING_TO_REDIS = 30;
     
+    // Events keys.
+    public final static String REPORTERID_ID = "reporterId";
+    public final static String TIMESTAMP_ID = "timestamp";
 
+    // redis Finals
+    public final static String HOST = "localhost";
+    public final static int REDIS_PORT = 6379;
 
 } 
