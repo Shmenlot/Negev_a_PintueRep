@@ -45,8 +45,7 @@ public class MongoRedisMain implements Finals {
                 BasicDBObject timeQuery = toFromDateQuery(lastRedisTime);
                 DBCursor timeCursor = eventsCollection.find(timeQuery);
                 while (timeCursor.hasNext()) {
-                    // why do we need this while?
-                    // shouldnt it just be an if?
+                    
                 }
                 TimeUnit.SECONDS.sleep(30);
             }
