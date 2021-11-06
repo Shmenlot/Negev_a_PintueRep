@@ -70,7 +70,9 @@ public class KafkaConsumerMain implements Finals{
 
         KafkaConsumerMain.closeConsumer();
     }
-
+    /**
+     * for inner use
+     */
     public static void test() {
         try {
             initialize();
@@ -81,18 +83,18 @@ public class KafkaConsumerMain implements Finals{
             DBCursor cursor = eventsCollection.find(query);
             System.out.println(cursor.one());
         } catch (JsonParseException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (JsonMappingException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
 
     }
 
+    /**
+     * initialize the consumer
+     */
     private static void initialize() throws UnknownHostException{
         // initialize kafka consumer.
         logger = LoggerFactory.getLogger(KafkaConsumerMain.class.getName());
