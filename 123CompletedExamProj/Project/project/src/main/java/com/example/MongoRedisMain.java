@@ -43,7 +43,7 @@ public class MongoRedisMain extends Thread implements Finals {
     public void run() {
         // Jedis j = new Jedis("localhost", 6379);
         // j.set("Poo-Poo", "Pretty flyu for a wifi");
-
+        
         initialize();
 
         // read "redis lastest timestamp" mongo metadata collection.
