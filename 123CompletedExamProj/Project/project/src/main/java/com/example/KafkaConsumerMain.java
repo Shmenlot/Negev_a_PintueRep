@@ -1,6 +1,5 @@
 package com.example;
 
-import java.io.IOException;
 import java.net.UnknownHostException;
 import java.time.Duration;
 import java.util.Collections;
@@ -11,7 +10,6 @@ import java.util.Properties;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 
@@ -22,9 +20,6 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonParseException;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.JsonMappingException;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 public class KafkaConsumerMain implements Finals{
     // kafka stuff.
@@ -35,8 +30,8 @@ public class KafkaConsumerMain implements Finals{
     private static boolean keepOnReading = true;
     // mongo stuff.
     private static MongoClient mongoClient;
-    private static DB database;
     private static DBCollection eventsCollection;
+    private static DB database;
 
     public static void main(String[] args) {
         try {
@@ -84,6 +79,14 @@ public class KafkaConsumerMain implements Finals{
         properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, groupID);
         properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         consumer = new KafkaConsumer<String, String>(properties);
+        // subscrive to our topics
+        consumer.subscribe(Collections.singleton(Finals.TOPIC));
+        // mongo stuff
+        mongoClient = new MongoClient(new MongoClientURI(Finals.MONGO_URL));
+        // create database.
+        database = mongoClient.getDB(Finals.MONGO_DB_NAME);
+        // create collection
+        eventsCollection = database.getCollection(Finals.MONGO_EVENTS_COLLECTION);
 
     }
 

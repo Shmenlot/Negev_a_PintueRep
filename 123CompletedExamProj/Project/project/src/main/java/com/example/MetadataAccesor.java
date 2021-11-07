@@ -35,7 +35,7 @@ public class MetadataAccesor implements Finals {
         // if no messege has been generated start id from zero
         if (metadata == null) {
 
-            BasicDBObject newMetadata = new BasicDBObject(NEXT_REPORT_ID, 0).append(NEXT_REPORT_ID, 0)
+            BasicDBObject newMetadata = new BasicDBObject(NEXT_REPORT_ID, 0).append(NEXT_METRIC_ID, 0)
                     .append(LAST_REDIS_TIME_STAMP, new Date(0));
             metaDataCollection.insert(newMetadata);
         }

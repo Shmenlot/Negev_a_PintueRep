@@ -44,7 +44,7 @@ public class MongoRedisMain extends Thread implements Finals {
 
     @Override
     public void run() {
-
+        initialize();
         Date lastRedisTime = MetadataAccesor.getLastRedisTime();// read date from mongo
         // read from the current time stamp
         BasicDBObject timeQuery = toFromDateQuery(lastRedisTime);
@@ -73,6 +73,7 @@ public class MongoRedisMain extends Thread implements Finals {
             database = mongoClient.getDB(MONGO_DB_NAME);
             // create collection
             eventsCollection = database.getCollection(MONGO_EVENTS_COLLECTION);
+            MetadataAccesor.initialize();
         } catch (UnknownHostException e) {
 
             e.printStackTrace();

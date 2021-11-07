@@ -22,8 +22,7 @@ public class KafkaProducerMain implements Finals{
     public static void main(String[] args) {
 
         boolean keepOnSending = true;
-        
-        KafkaProducerMain.initialize();
+        initialize();
         EventFactory.initialize();
         while(keepOnSending){
             try {
