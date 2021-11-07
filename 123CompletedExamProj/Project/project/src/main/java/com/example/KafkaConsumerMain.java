@@ -1,6 +1,5 @@
 package com.example;
 
-import java.io.IOException;
 import java.net.UnknownHostException;
 import java.time.Duration;
 import java.util.Collections;
@@ -11,7 +10,6 @@ import java.util.Properties;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 
@@ -22,9 +20,6 @@ import org.apache.kafka.clients.consumer.KafkaConsumer;
 import org.apache.kafka.common.serialization.StringDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.testcontainers.shaded.com.fasterxml.jackson.core.JsonParseException;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.JsonMappingException;
-import org.testcontainers.shaded.com.fasterxml.jackson.databind.ObjectMapper;
 
 public class KafkaConsumerMain implements Finals{
     // kafka stuff.
@@ -35,8 +30,8 @@ public class KafkaConsumerMain implements Finals{
     private static boolean keepOnReading = true;
     // mongo stuff.
     private static MongoClient mongoClient;
-    private static DB database;
     private static DBCollection eventsCollection;
+    private static DB database;
 
     public static void main(String[] args) {
         try {
@@ -64,30 +59,9 @@ public class KafkaConsumerMain implements Finals{
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
-
         KafkaConsumerMain.closeConsumer();
     }
-    /**
-     * for inner use
-     */
-    public static void test() {
-        try {
-            initialize();
 
-            String jso = "\"timestamp\" : {\"$gte\" : ISODate(\"2021-10-31T00:00:00Z\"), \"$lt\" : ISODate(\"2030-07-03T00:00:00Z\") }";
-            ObjectMapper mapper = new ObjectMapper();
-            BasicDBObject query = mapper.readValue(jso, BasicDBObject.class);
-            DBCursor cursor = eventsCollection.find(query);
-            System.out.println(cursor.one());
-        } catch (JsonParseException e) {
-            e.printStackTrace();
-        } catch (JsonMappingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
 
     /**
      * initialize the consumer
@@ -97,7 +71,7 @@ public class KafkaConsumerMain implements Finals{
         logger = LoggerFactory.getLogger(KafkaConsumerMain.class.getName());
         properties = new Properties();
         groupID = "ABC";
-        properties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, Finals.BOOTSTRAP_SERVER);
+        properties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVER);
         properties.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());// bytes
                                                                                                                  // to
                                                                                                                  // string
@@ -107,7 +81,6 @@ public class KafkaConsumerMain implements Finals{
         consumer = new KafkaConsumer<String, String>(properties);
         // subscrive to our topics
         consumer.subscribe(Collections.singleton(Finals.TOPIC));
-
         // mongo stuff
         mongoClient = new MongoClient(new MongoClientURI(Finals.MONGO_URL));
         // create database.

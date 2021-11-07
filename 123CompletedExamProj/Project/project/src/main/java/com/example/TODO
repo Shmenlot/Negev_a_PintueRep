@@ -1,5 +1,4 @@
-seprate event to eventlogger and event
-add threads
-make mongo updating easier
+add logger to mongoredis main (and delete all sysout)
+add comments
 check todos and delete trash
 make query more readable mongoredis
