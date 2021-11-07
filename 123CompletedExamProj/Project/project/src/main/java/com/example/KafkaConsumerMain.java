@@ -44,6 +44,7 @@ public class KafkaConsumerMain implements Finals{
                 for (ConsumerRecord<String, String> record : records) {
                     logger.info("Recived message to Kafkaconsumer\n Key: \n" + record.key() + "Value:\n" + record.value());
                     logger.info("Partition: \n" + record.partition() + " Offset:\n" + record.offset());
+
                     Event currEvent = EventFactory.createFromJson(record.value());
                     Map<String, Object> curEventMap = new HashMap<>();
                     curEventMap.put("reportId", currEvent.getReportId());
@@ -51,6 +52,7 @@ public class KafkaConsumerMain implements Finals{
                     curEventMap.put("metricId", currEvent.getMetricId());
                     curEventMap.put("metricValue", currEvent.getMetricValue());
                     curEventMap.put("message", currEvent.getMessage());
+
                     BasicDBObject eventObj = new BasicDBObject(curEventMap);
                     eventsCollection.insert(eventObj);
                 }
@@ -68,12 +70,11 @@ public class KafkaConsumerMain implements Finals{
     private static void initialize() throws UnknownHostException{
         // initialize kafka consumer.
         logger = LoggerFactory.getLogger(KafkaConsumerMain.class.getName());
+        
         properties = new Properties();
         groupID = "ABC";
         properties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVER);
-        properties.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());// bytes
-                                                                                                                 // to
-                                                                                                                 // string
+        properties.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());// bytes to string                                                                                            
         properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, groupID);
         properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");

@@ -56,7 +56,9 @@ public class MongoRedisMain extends Thread implements Finals {
         DBCursor timeCursor = eventsCollection.find(timeQuery);
         String currentTimeStamp, currentReportID;
         timeCursor.sort(new BasicDBObject(TIMESTAMP_ID, 1));
+
         while (timeCursor.hasNext()) {
+            
             DBObject currentEvent = timeCursor.next();
             currentReportID = Integer.toString((Integer) currentEvent.get(REPORTID_ID));
             currentTimeStamp = ((Date) timeCursor.one().get(TIMESTAMP_ID)).toInstant().toString();

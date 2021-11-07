@@ -24,6 +24,7 @@ public class KafkaProducerMain implements Finals{
         boolean keepOnSending = true;
         initialize();
         EventFactory.initialize();
+        
         while(keepOnSending){
             try {
                 TimeUnit.SECONDS.sleep(1);
