@@ -6,13 +6,8 @@ import java.util.Random;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.mongodb.BasicDBObject;
-import com.mongodb.DB;
-import com.mongodb.DBCollection;
-import com.mongodb.DBCursor;
-import com.mongodb.DBObject;
-import com.mongodb.MongoClient;
-import com.mongodb.MongoClientURI;
+
+
 // This class is the initializer of "Event".
 public class EventFactory implements Finals {
     // Finals
@@ -20,72 +15,27 @@ public class EventFactory implements Finals {
     final static int RAND_STR_OPT = 4;
     final static int MAX_METRIC_VAL = 1000;
 
-    // statics
-    private static int nextReportID;
-    private static int nextMetricID;
-
-    // for saving metadata in mongo
-    //keys in the mongo metadata : nextReportID,nextMetricID
-    private static MongoClient mongoClient;
-    private static DB database;
-    private static DBCollection metaDataCollection;
-
+    
     /**
-     * Creates new event with uniuque metricId and reportId. 
+     * Creates new event with uniuque metricId and reportId.
      * 
      * @return new generated Event
      */
     public static Event create() {
-        int nReportId = nextReportID;
-        int nMetricId = nextMetricID;
+        int nReportId = MetadataAccesor.getNextReportId();
+        int nMetricId = MetadataAccesor.getNextMetricID();
         Date nTimeStamp = new Date(System.currentTimeMillis());
         int nMetricValue = generateRandMetricVal();
-        nextReportID++;
-        nextMetricID++;
-        //empty query get first
-        DBObject query = new BasicDBObject();
-        
-        //create dbobject to update
-        BasicDBObject updateNextReportID = new BasicDBObject();
-        BasicDBObject updateNextMetricID = new BasicDBObject();
-        
-        updateNextReportID.append("$set", new BasicDBObject(NEXT_REPORT_ID,nextReportID));
-        updateNextMetricID.append("$set",new BasicDBObject(NEXT_METRIC_ID, nextMetricID));
 
-        metaDataCollection.update(query, updateNextReportID);
-        metaDataCollection.update(query, updateNextMetricID);
+        // update and then create in case of termation between commands will be skipped
+        // instead of two with same id
+        MetadataAccesor.setNextReportId(nReportId + 1);
+        MetadataAccesor.setNextMetricID(nMetricId + 1);
         return new Event(nReportId, nTimeStamp, nMetricId, nMetricValue, generateRandomSUString());
     }
 
     public static void initialize() {
-       
-        try {
-             // mongo stuff
-            mongoClient = new MongoClient(new MongoClientURI(Finals.MONGO_URL));
-            // create database.
-            database = mongoClient.getDB(Finals.MONGO_DB_NAME);
-            // create collection
-            metaDataCollection = database.getCollection(Finals.MONGO_META_DATA_COLLECTION);
-            DBObject query = new BasicDBObject();
-            //read from mongo 
-            DBCursor cursor = metaDataCollection.find(query);
-            DBObject metadata = cursor.one();
-            //if no messege has been generated start id from zero
-            if (metadata == null) {
-                nextReportID = 0;
-                nextMetricID = 0;
-                
-                BasicDBObject newMetadata = new BasicDBObject(NEXT_REPORT_ID,0).append(NEXT_REPORT_ID, 0);
-                metaDataCollection.insert(newMetadata);
-            }
-            //if some messages have been generated start id by the last id
-            else {
-                nextReportID = (Integer)(metadata.get("nextReportID"));
-                nextMetricID = (Integer)(metadata.get("nextMetricID"));
-            }
-        } catch (UnknownHostException e) {
-            e.printStackTrace();
-        }
+        MetadataAccesor.initialize();
     }
 
     /**

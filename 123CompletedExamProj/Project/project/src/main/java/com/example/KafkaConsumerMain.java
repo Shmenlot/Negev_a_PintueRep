@@ -64,30 +64,9 @@ public class KafkaConsumerMain implements Finals{
         } catch (UnknownHostException e) {
             e.printStackTrace();
         }
-
         KafkaConsumerMain.closeConsumer();
     }
-    /**
-     * for inner use
-     */
-    public static void test() {
-        try {
-            initialize();
 
-            String jso = "\"timestamp\" : {\"$gte\" : ISODate(\"2021-10-31T00:00:00Z\"), \"$lt\" : ISODate(\"2030-07-03T00:00:00Z\") }";
-            ObjectMapper mapper = new ObjectMapper();
-            BasicDBObject query = mapper.readValue(jso, BasicDBObject.class);
-            DBCursor cursor = eventsCollection.find(query);
-            System.out.println(cursor.one());
-        } catch (JsonParseException e) {
-            e.printStackTrace();
-        } catch (JsonMappingException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-    }
 
     /**
      * initialize the consumer
@@ -97,7 +76,7 @@ public class KafkaConsumerMain implements Finals{
         logger = LoggerFactory.getLogger(KafkaConsumerMain.class.getName());
         properties = new Properties();
         groupID = "ABC";
-        properties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, Finals.BOOTSTRAP_SERVER);
+        properties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVER);
         properties.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());// bytes
                                                                                                                  // to
                                                                                                                  // string
@@ -105,15 +84,6 @@ public class KafkaConsumerMain implements Finals{
         properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, groupID);
         properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         consumer = new KafkaConsumer<String, String>(properties);
-        // subscrive to our topics
-        consumer.subscribe(Collections.singleton(Finals.TOPIC));
-
-        // mongo stuff
-        mongoClient = new MongoClient(new MongoClientURI(Finals.MONGO_URL));
-        // create database.
-        database = mongoClient.getDB(Finals.MONGO_DB_NAME);
-        // create collection
-        eventsCollection = database.getCollection(Finals.MONGO_EVENTS_COLLECTION);
 
     }
 
