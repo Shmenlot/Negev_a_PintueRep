@@ -30,6 +30,7 @@ public class MongoRedisMain extends Thread implements Finals {
     private static Logger logger;
 
     public static void main(String[] args) {
+        initialize();
         int i = 0;
         MongoRedisMain mrm = null;
         while (true) {
@@ -49,7 +50,6 @@ public class MongoRedisMain extends Thread implements Finals {
 
     @Override
     public void run() {
-        initialize();
         Date lastRedisTime = MetadataAccesor.getLastRedisTime();// read date from mongo
         // read from the current time stamp
         BasicDBObject timeQuery = toFromDateQuery(lastRedisTime);
@@ -73,7 +73,7 @@ public class MongoRedisMain extends Thread implements Finals {
     public static void initialize() {
         try {
             // create logger
-            logger = LoggerFactory.getLogger(KafkaConsumerMain.class.getName());
+            logger = LoggerFactory.getLogger(KafkaProducerMain.class.getName());
             // Redis stauff
             chashud = new Jedis(HOST, REDIS_PORT);
             // mongo stuff
