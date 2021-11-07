@@ -38,18 +38,25 @@ public class MongoRedisMain extends Thread implements Finals {
                 mrm = new MongoRedisMain();
                 logger.info("Starts Iteration " + i);
                 mrm.start();
+                i++;
             }
             try {
                 TimeUnit.SECONDS.sleep(DELAY_BETWEEN_MOVING_TO_REDIS);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            i++;
+            
         }
     }
 
     @Override
     public void run() {
+        try {
+            TimeUnit.SECONDS.sleep(DELAY_BETWEEN_MOVING_TO_REDIS*2);
+        } catch (InterruptedException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
         Date lastRedisTime = MetadataAccesor.getLastRedisTime();// read date from mongo
         // read from the current time stamp
         BasicDBObject timeQuery = toFromDateQuery(lastRedisTime);
