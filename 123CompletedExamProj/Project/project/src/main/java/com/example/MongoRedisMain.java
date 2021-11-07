@@ -15,6 +15,9 @@ import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import redis.clients.jedis.Jedis;
 
 public class MongoRedisMain extends Thread implements Finals {
@@ -24,13 +27,15 @@ public class MongoRedisMain extends Thread implements Finals {
     private static Jedis chashud;
     private static DB database;
 
+    private static Logger logger;
+
     public static void main(String[] args) {
         int i = 0;
         MongoRedisMain mrm = null;
         while (true) {
             if (mrm == null || !mrm.isAlive()) {
                 mrm = new MongoRedisMain();
-                System.out.println("Iteration " + i);
+                logger.info("Starts Iteration " + i);
                 mrm.start();
             }
             try {
@@ -56,15 +61,19 @@ public class MongoRedisMain extends Thread implements Finals {
             currentReportID = Integer.toString((Integer) currentEvent.get(REPORTID_ID));
             currentTimeStamp = ((Date) timeCursor.one().get(TIMESTAMP_ID)).toInstant().toString();
             chashud.set(currentReportID + ":" + currentTimeStamp, currentEvent.toString());
-            System.out.println(currentReportID + ":" + currentTimeStamp);
-            System.out.println(currentEvent.toString());
-            System.out.println();
+
+            // send to redis and then update date for avoiding losing masseges (worst case
+            // ovveride himself)
+            logger.info("Recived masage from mongo and sends to redis by]\n" + "Key:" + currentReportID + ":"
+                    + currentTimeStamp + "\nValue:" + currentEvent.toString() + "\n");
             MetadataAccesor.setLastRedisTime((Date) (currentEvent.get(TIMESTAMP_ID)));
         }
     }
 
     public static void initialize() {
         try {
+            // create logger
+            logger = LoggerFactory.getLogger(KafkaConsumerMain.class.getName());
             // Redis stauff
             chashud = new Jedis(HOST, REDIS_PORT);
             // mongo stuff
@@ -95,13 +104,5 @@ public class MongoRedisMain extends Thread implements Finals {
 
         return new BasicDBObject("timestamp", new BasicDBObject("$gt", d));
 
-    }
-
-    public static void test() {
-        initialize();
-        System.out.println(toFromDateQuery(new Date(1636040482000L)).toString());
-        DBCursor cursor = eventsCollection.find(toFromDateQuery(new Date(1636040482000L)));
-
-        System.out.println(cursor.one());
     }
 }

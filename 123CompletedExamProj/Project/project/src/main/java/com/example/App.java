@@ -15,6 +15,6 @@ public final class App {
      */
     public static void main(String[] args) throws InterruptedException {
         // prints "hello world".
-        System.out.println("hellow world");
+        System.out.println("hello world");
     }
 }

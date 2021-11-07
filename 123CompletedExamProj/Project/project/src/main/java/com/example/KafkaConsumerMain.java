@@ -42,8 +42,8 @@ public class KafkaConsumerMain implements Finals{
                 // get from kafka
                 ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
                 for (ConsumerRecord<String, String> record : records) {
-                    logger.info("Key: " + record.key() + "Value:" + record.value());
-                    logger.info("Partition: " + record.partition() + " Offset:" + record.offset());
+                    logger.info("Recived message to Kafkaconsumer\n Key: \n" + record.key() + "Value:\n" + record.value());
+                    logger.info("Partition: \n" + record.partition() + " Offset:\n" + record.offset());
                     Event currEvent = EventFactory.createFromJson(record.value());
                     Map<String, Object> curEventMap = new HashMap<>();
                     curEventMap.put("reportId", currEvent.getReportId());
@@ -51,7 +51,6 @@ public class KafkaConsumerMain implements Finals{
                     curEventMap.put("metricId", currEvent.getMetricId());
                     curEventMap.put("metricValue", currEvent.getMetricValue());
                     curEventMap.put("message", currEvent.getMessage());
-                    System.out.println(currEvent.getTimestamp().getTime());
                     BasicDBObject eventObj = new BasicDBObject(curEventMap);
                     eventsCollection.insert(eventObj);
                 }

@@ -17,7 +17,7 @@ public class KafkaProducerMain implements Finals{
 
     private static Properties prop;
     private static KafkaProducer<String, String> producer;
-    private static Logger log;
+    private static Logger logger;
     
     public static void main(String[] args) {
 
@@ -43,7 +43,7 @@ public class KafkaProducerMain implements Finals{
         prop.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         prop.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         producer = new KafkaProducer<String, String>(prop);
-        log = LoggerFactory.getLogger(KafkaProducerMain.class);
+        logger = LoggerFactory.getLogger(KafkaProducerMain.class);
     }
 
     /**
@@ -65,11 +65,11 @@ public class KafkaProducerMain implements Finals{
             public void onCompletion(RecordMetadata metadata, Exception e) {
                 // when record sent successfully
                 if (e == null) {
-                    log.info("Recived info\n" + "Topic " + metadata.topic() + "\nPartition " + metadata.partition()
-                            + "\nOffset " + metadata.offset() + "\nTimestamp " + metadata.timestamp() + "\n");
+                    logger.info("Recived info\n" + "Topic " + metadata.topic() + "\nPartition " + metadata.partition()
+                            + "\nOffset " + metadata.offset() + "\nTimestamp " + metadata.timestamp() + "\n ");
                 //when there was problem in sending the 
                 } else {
-                    log.error("Error while producing ", e);
+                    logger.error("Error while producing ", e);
                 }
             }
         });
