@@ -24,7 +24,7 @@ public class MongoRedisMain extends Thread implements Finals {
 
     private static MongoClient mongoClient;
     private static DBCollection eventsCollection;
-    private static Jedis chashud;
+    private static Jedis jedis;
     private static DB database;
 
     private static Logger logger;
@@ -56,18 +56,19 @@ public class MongoRedisMain extends Thread implements Finals {
         DBCursor timeCursor = eventsCollection.find(timeQuery);
         String currentTimeStamp, currentReportID;
         timeCursor.sort(new BasicDBObject(TIMESTAMP_ID, 1));
-
+        // Insert the latest data from mongo into redis
         while (timeCursor.hasNext()) {
-            
+            // Add data by cursor to redis
             DBObject currentEvent = timeCursor.next();
             currentReportID = Integer.toString((Integer) currentEvent.get(REPORTID_ID));
             currentTimeStamp = ((Date) timeCursor.one().get(TIMESTAMP_ID)).toInstant().toString();
-            chashud.set(currentReportID + ":" + currentTimeStamp, currentEvent.toString());
+            jedis.set(currentReportID + ":" + currentTimeStamp, currentEvent.toString());
 
-            // send to redis and then update date for avoiding losing masseges (worst case
-            // ovveride himself)
+            // Send to redis and then update date for avoiding losing masseges (worst case
+            // Overide himself)
             logger.info("Recived masage from mongo and sends to redis by]\n" + "Key:" + currentReportID + ":"
                     + currentTimeStamp + "\nValue:" + currentEvent.toString() + "\n");
+            // Update Latest date in metadata.
             MetadataAccesor.setLastRedisTime((Date) (currentEvent.get(TIMESTAMP_ID)));
         }
     }
@@ -77,7 +78,7 @@ public class MongoRedisMain extends Thread implements Finals {
             // create logger
             logger = LoggerFactory.getLogger(KafkaProducerMain.class.getName());
             // Redis stauff
-            chashud = new Jedis(HOST, REDIS_PORT);
+            jedis = new Jedis(HOST, REDIS_PORT);
             // mongo stuff
             mongoClient = new MongoClient(new MongoClientURI(MONGO_URL));
             // create database.
