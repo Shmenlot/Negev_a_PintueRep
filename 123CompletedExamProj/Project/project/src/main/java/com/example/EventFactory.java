@@ -8,8 +8,8 @@ import com.google.gson.GsonBuilder;
 
 
 // This class is the initializer of "Event".
-public class EventFactory implements Finals {
-    // Finals
+public class EventFactory{
+    // finals
     final static int MAX_MASSAGE_SIZE = 100;
     final static int RAND_STR_OPT = 4;
     final static int MAX_METRIC_VAL = 1000;

@@ -21,7 +21,7 @@ import org.apache.kafka.common.serialization.StringDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class KafkaConsumerMain implements Finals{
+public class KafkaConsumerMain{
     // kafka stuff.
     private static String groupID;
     private static Logger logger;
@@ -32,6 +32,7 @@ public class KafkaConsumerMain implements Finals{
     private static MongoClient mongoClient;
     private static DBCollection eventsCollection;
     private static DB database;
+    private static Finals finals;
 
     public static void main(String[] args) {
         try {
@@ -68,25 +69,26 @@ public class KafkaConsumerMain implements Finals{
      * initialize the consumer
      */
     private static void initialize() throws UnknownHostException{
+        finals = new Finals();
         // initialize kafka consumer.
         logger = LoggerFactory.getLogger(KafkaConsumerMain.class.getName());
         
         properties = new Properties();
         groupID = "ABC";
-        properties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVER);
+        properties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, finals.BOOTSTRAP_SERVER());
         properties.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());// bytes to string                                                                                            
         properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, groupID);
         properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         consumer = new KafkaConsumer<String, String>(properties);
         // subscrive to our topics
-        consumer.subscribe(Collections.singleton(Finals.TOPIC));
+        consumer.subscribe(Collections.singleton(finals.TOPIC()));
         // mongo stuff
-        mongoClient = new MongoClient(new MongoClientURI(Finals.MONGO_URL));
+        mongoClient = new MongoClient(new MongoClientURI(finals.MONGO_URL()));
         // create database.
-        database = mongoClient.getDB(Finals.MONGO_DB_NAME);
+        database = mongoClient.getDB(finals.MONGO_DB_NAME());
         // create collection
-        eventsCollection = database.getCollection(Finals.MONGO_EVENTS_COLLECTION);
+        eventsCollection = database.getCollection(finals.MONGO_EVENTS_COLLECTION());
 
     }
 

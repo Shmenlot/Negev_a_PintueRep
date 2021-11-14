@@ -1,0 +1,27 @@
+#if you like to change one of the keys or add new key, change in Finals.initilize
+KafkaFinals:
+  BOOTSTRAP_SERVER: "localhost:9092"
+  TOPIC: "lastTopic7"
+
+MongoDB_Finals:
+  MONGO_URL: "mongodb://localhost:27017"
+  MONGO_DB_NAME: "DataBase12"
+  MONGO_EVENTS_COLLECTION: "Events"
+  MONGO_META_DATA_COLLECTION: "MetaData"
+
+MetaDataKeys:
+  NEXT_REPORT_ID: "nextReportID"
+  NEXT_METRIC_ID: "nextMetricID"
+  LAST_REDIS_TIME_STAMP: "lastRedisTimeStamp"
+
+TimeUnits:
+  DELAY_BETWEEN_EVENTS_CREATED: 1
+  DELAY_BETWEEN_MOVING_TO_REDIS : 10
+
+EventsKeys:
+  REPORTID_ID: "reportId"
+  TIMESTAMP_ID: "timestamp"
+
+RedisFinals:
+  Host: "localhost"
+  REDIS_PORT: 6379

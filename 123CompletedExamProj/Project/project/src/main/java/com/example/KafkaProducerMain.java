@@ -12,9 +12,9 @@ import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class KafkaProducerMain implements Finals{
+public class KafkaProducerMain{
 
-
+    private static Finals finals;
     private static Properties prop;
     private static KafkaProducer<String, String> producer;
     private static Logger logger;
@@ -39,8 +39,9 @@ public class KafkaProducerMain implements Finals{
     
     public static void initialize() {
         // create producer properties
+        finals = new Finals();
         prop = new Properties();
-        prop.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVER);
+        prop.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, finals.BOOTSTRAP_SERVER());
         prop.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         prop.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
         producer = new KafkaProducer<String, String>(prop);
@@ -59,7 +60,7 @@ public class KafkaProducerMain implements Finals{
         String jsonEvent = EventFactory.toJson(event);
 
         // create record
-        ProducerRecord<String, String> record = new ProducerRecord<String, String>(TOPIC, jsonEvent);
+        ProducerRecord<String, String> record = new ProducerRecord<String, String>(finals.TOPIC(), jsonEvent);
 
         // send and flush
         producer.send(record, new Callback() {
