@@ -1,4 +1,3 @@
-#if you like to change one of the keys or add new key, change in Finals.initilize
 KafkaFinals:
   BOOTSTRAP_SERVER: "localhost:9092"
   TOPIC: "lastTopic7"
@@ -23,5 +22,7 @@ EventsKeys:
   TIMESTAMP_ID: "timestamp"
 
 RedisFinals:
-  Host: "localhost"
+  HOST: "localhost"
   REDIS_PORT: 6379
+
+#if you like to change one of the keys or add new key, change in Finals.initilize
