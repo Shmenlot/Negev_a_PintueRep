@@ -44,8 +44,6 @@
       <groupId>org.slf4j</groupId>
       <artifactId>slf4j-simple</artifactId>
       <version>1.7.12</version>
-
-
     </dependency>
 
     <!-- https://mvnrepository.com/artifact/org.apache.kafka/kafka-clients -->
@@ -94,7 +92,12 @@
       <groupId>redis.clients</groupId>
       <artifactId>jedis</artifactId>
       <version>3.7.0</version>
-
+    </dependency>
+    <!-- https://mvnrepository.com/artifact/org.yaml/snakeyaml -->
+    <dependency>
+      <groupId>org.yaml</groupId>
+      <artifactId>snakeyaml</artifactId>
+      <version>1.29</version>
     </dependency>
 
   </dependencies> <!-- end of dependencies -->
