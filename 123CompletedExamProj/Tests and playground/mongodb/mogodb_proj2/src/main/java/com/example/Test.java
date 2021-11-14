@@ -12,7 +12,7 @@ public class Test {
     }
     public void initialize() {
         Yaml yaml = new Yaml();
-        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream("A.yaml");
+        InputStream inputStream = this.getClass().getClassLoader().getResourceAsStream(".\\src\\main\\java\\com\\example\\A.yaml");
         Map<String, Object> obj = yaml.load(inputStream);
         System.out.println(obj);
     }
