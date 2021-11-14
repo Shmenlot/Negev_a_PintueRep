@@ -5,8 +5,9 @@ import java.util.Map;
 
 import org.yaml.snakeyaml.Yaml;
 
-// This interface is used to centralize the s.
+// This interface is used to centralize the
 public class Finals {
+
     public static void main(String[] args) {
         initialize();
     }
