@@ -3,7 +3,6 @@ package com.example;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.InputStream;
 import java.util.Map;
 
 import org.yaml.snakeyaml.Yaml;
@@ -11,12 +10,12 @@ import org.yaml.snakeyaml.Yaml;
 // This interface is used to centralize the
 public class Finals {
 
-    private static final String CONSTANTS = ".\\src\\main\\java\\com\\example\\Constants.yml";
+    private static final String CONSTANTS = "./src/main/java/com/example/Constants.yml";
     private static Yaml yaml;
     /**
      * The keys of the constants's class.
      */
-    private static final String KAFKAFINALS = "kafkaFinals";
+    private static final String KAFKAFINALS = "KafkaFinals";
     private static final String MONGODB_FINALS = "MongoDB_Finals";
     private static final String METADATAKEYS = "MetaDataKeys";
     private static final String TIMEUNITS = "TimeUnits";
@@ -47,6 +46,9 @@ public class Finals {
     // Events keys.
     private String _REPORTID_ID;
     private String _TIMESTAMP_ID;
+    private String _METRICID_ID;
+    private String _METRIC_VALUE_ID;
+    private String _MESSAGE_ID;
 
     // redis Finals
     private String _HOST;
@@ -59,13 +61,14 @@ public class Finals {
             Map<String, Object> finalsMap;
             finalsMap = yaml.load(new FileReader(new File(CONSTANTS)));
 
+            
             // divide to subMaps
-            Map<String, Object> kafkaMapFinals = (Map) finalsMap.get(KAFKAFINALS);
-            Map<String, Object> mongoMapFinals = (Map) finalsMap.get(MONGODB_FINALS);
-            Map<String, Object> metaDataKeys = (Map) finalsMap.get(METADATAKEYS);
-            Map<String, Object> timeUnitesMapFinals = (Map) finalsMap.get(TIMEUNITS);
-            Map<String, Object> eventsKeysMap = (Map) finalsMap.get(EVENTSKEYS);
-            Map<String, Object> redisMapFinals = (Map) finalsMap.get(REDISFINALS);
+            Map<String, Object> kafkaMapFinals = (Map<String, Object>) finalsMap.get(KAFKAFINALS);
+            Map<String, Object> mongoMapFinals = (Map<String, Object>) finalsMap.get(MONGODB_FINALS);
+            Map<String, Object> metaDataKeys = (Map<String, Object>) finalsMap.get(METADATAKEYS);
+            Map<String, Object> timeUnitesMapFinals = (Map<String, Object>) finalsMap.get(TIMEUNITS);
+            Map<String, Object> eventsKeysMap = (Map<String, Object>) finalsMap.get(EVENTSKEYS);
+            Map<String, Object> redisMapFinals = (Map<String, Object>) finalsMap.get(REDISFINALS);
 
             // read all finals
 
@@ -85,13 +88,17 @@ public class Finals {
             _LAST_REDIS_TIME_STAMP = (String) metaDataKeys.get("LAST_REDIS_TIME_STAMP");
 
             // time units
-            _DELAY_BETWEEN_EVENTS_CREATED = (Integer) metaDataKeys.get("DELAY_BETWEEN_EVENTS_CREATED");
+            _DELAY_BETWEEN_EVENTS_CREATED = (Integer) timeUnitesMapFinals.get("DELAY_BETWEEN_EVENTS_CREATED");
             _DELAY_BETWEEN_MOVING_TO_REDIS = (Integer) timeUnitesMapFinals.get("DELAY_BETWEEN_MOVING_TO_REDIS");
 
             // event keys
             _REPORTID_ID = (String) eventsKeysMap.get("REPORTID_ID");
             _TIMESTAMP_ID = (String) eventsKeysMap.get("TIMESTAMP_ID");
-
+            _METRICID_ID = (String) eventsKeysMap.get("METRICID_ID");
+            _METRIC_VALUE_ID = (String) eventsKeysMap.get("METRICVALUE_ID");
+            _MESSAGE_ID = (String) eventsKeysMap.get("MESSAGE_ID");
+            
+            
             // redis finals
             _HOST = (String) redisMapFinals.get("HOST");
             _REDIS_PORT = (Integer) redisMapFinals.get("REDIS_PORT");
@@ -159,6 +166,15 @@ public class Finals {
 
     public int REDIS_PORT() {
         return this._REDIS_PORT;
+    }
+    public String METRICID_ID(){
+        return _METRICID_ID;
+    }
+    public String METRIC_VALUE_ID(){
+        return _METRIC_VALUE_ID;
+    }
+    public String MESSAGE_ID(){
+        return _MESSAGE_ID;
     }
 
 }
