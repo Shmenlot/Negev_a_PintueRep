@@ -23,5 +23,5 @@ EventsKeys:
   TIMESTAMP_ID: "timestamp"
 
 RedisFinals:
-  Host: "localhost"
+  HOST: "localhost"
   REDIS_PORT: 6379
