@@ -16,7 +16,7 @@ public class KafkaProducerMain{
 
     private static Finals finals;
     private static Properties prop;
-    private static KafkaProducer<String, String> producer;
+    private static KafkaProducer<String, Event> producer;
     private static Logger logger;
     
     public static void main(String[] args) {
@@ -42,9 +42,9 @@ public class KafkaProducerMain{
         finals = new Finals();
         prop = new Properties();
         prop.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, finals.BOOTSTRAP_SERVER());
-        prop.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-        prop.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, StringSerializer.class.getName());
-        producer = new KafkaProducer<String, String>(prop);
+        prop.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, EventSerializer.class.getName());
+        prop.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, EventSerializer.class.getName());
+        producer = new KafkaProducer<String, Event>(prop);
         logger = LoggerFactory.getLogger(KafkaProducerMain.class);
     }
 
@@ -57,10 +57,9 @@ public class KafkaProducerMain{
 
         // generate EventJSon String
         Event event = generateRandomEvent();
-        String jsonEvent = EventFactory.toJson(event);
-
+        
         // create record
-        ProducerRecord<String, String> record = new ProducerRecord<String, String>(finals.TOPIC(), jsonEvent);
+        ProducerRecord<String, Event> record = new ProducerRecord<String, Event>(finals.TOPIC(), event);
 
         // send and flush
         producer.send(record, new Callback() {
