@@ -21,6 +21,9 @@ TimeUnits:
 EventsKeys:
   REPORTID_ID: "reportId"
   TIMESTAMP_ID: "timestamp"
+  METRICID_ID: "metricId"
+  METRICVALUE_ID: "metricValue"
+  MESSAGE_ID: "message"
 
 RedisFinals:
   HOST: "localhost"

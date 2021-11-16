@@ -1,2 +1,0 @@
-1. What does the metricvalue parameter mean?
-2. Do we need to start the kafka and zk servers from java?

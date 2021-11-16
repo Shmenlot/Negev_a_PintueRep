@@ -8,7 +8,6 @@ import org.apache.kafka.clients.producer.KafkaProducer;
 import org.apache.kafka.clients.producer.ProducerConfig;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.clients.producer.RecordMetadata;
-import org.apache.kafka.common.serialization.StringSerializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,7 +56,7 @@ public class KafkaProducerMain{
 
         // generate EventJSon String
         Event event = generateRandomEvent();
-        
+
         // create record
         ProducerRecord<String, Event> record = new ProducerRecord<String, Event>(finals.TOPIC(), event);
 

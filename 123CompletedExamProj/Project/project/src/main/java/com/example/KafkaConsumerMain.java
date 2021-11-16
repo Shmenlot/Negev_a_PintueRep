@@ -48,11 +48,11 @@ public class KafkaConsumerMain{
 
                     Event currEvent = EventFactory.createFromJson(record.value());
                     Map<String, Object> curEventMap = new HashMap<>();
-                    curEventMap.put("reportId", currEvent.getReportId());
-                    curEventMap.put("timestamp", currEvent.getTimestamp());
-                    curEventMap.put("metricId", currEvent.getMetricId());
-                    curEventMap.put("metricValue", currEvent.getMetricValue());
-                    curEventMap.put("message", currEvent.getMessage());
+                    curEventMap.put(finals.REPORTID_ID(), currEvent.getReportId());
+                    curEventMap.put(finals.TIMESTAMP_ID(), currEvent.getTimestamp());
+                    curEventMap.put(finals.METRICID_ID(), currEvent.getMetricId());
+                    curEventMap.put(finals.METRIC_VALUE_ID(), currEvent.getMetricValue());
+                    curEventMap.put(finals.MESSAGE_ID(), currEvent.getMessage());
 
                     BasicDBObject eventObj = new BasicDBObject(curEventMap);
                     eventsCollection.insert(eventObj);

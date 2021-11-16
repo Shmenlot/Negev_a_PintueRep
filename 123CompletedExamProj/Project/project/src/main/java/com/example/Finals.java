@@ -3,7 +3,6 @@ package com.example;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
-import java.io.InputStream;
 import java.util.Map;
 
 import org.yaml.snakeyaml.Yaml;
@@ -47,6 +46,9 @@ public class Finals {
     // Events keys.
     private String _REPORTID_ID;
     private String _TIMESTAMP_ID;
+    private String _METRICID_ID;
+    private String _METRIC_VALUE_ID;
+    private String _MESSAGE_ID;
 
     // redis Finals
     private String _HOST;
@@ -59,6 +61,7 @@ public class Finals {
             Map<String, Object> finalsMap;
             finalsMap = yaml.load(new FileReader(new File(CONSTANTS)));
 
+            
             // divide to subMaps
             Map<String, Object> kafkaMapFinals = (Map<String, Object>) finalsMap.get(KAFKAFINALS);
             Map<String, Object> mongoMapFinals = (Map<String, Object>) finalsMap.get(MONGODB_FINALS);
@@ -91,7 +94,11 @@ public class Finals {
             // event keys
             _REPORTID_ID = (String) eventsKeysMap.get("REPORTID_ID");
             _TIMESTAMP_ID = (String) eventsKeysMap.get("TIMESTAMP_ID");
-
+            _METRICID_ID = (String) eventsKeysMap.get("METRICID_ID");
+            _METRIC_VALUE_ID = (String) eventsKeysMap.get("METRICVALUE_ID");
+            _MESSAGE_ID = (String) eventsKeysMap.get("MESSAGE_ID");
+            
+            
             // redis finals
             _HOST = (String) redisMapFinals.get("HOST");
             _REDIS_PORT = (Integer) redisMapFinals.get("REDIS_PORT");
@@ -159,6 +166,15 @@ public class Finals {
 
     public int REDIS_PORT() {
         return this._REDIS_PORT;
+    }
+    public String METRICID_ID(){
+        return _METRICID_ID;
+    }
+    public String METRIC_VALUE_ID(){
+        return _METRIC_VALUE_ID;
+    }
+    public String MESSAGE_ID(){
+        return _MESSAGE_ID;
     }
 
 }
