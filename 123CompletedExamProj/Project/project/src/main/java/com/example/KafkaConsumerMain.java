@@ -26,7 +26,7 @@ public class KafkaConsumerMain{
     private static String groupID;
     private static Logger logger;
     private static Properties properties;
-    private static KafkaConsumer<String, String> consumer;
+    private static KafkaConsumer<String, Event> consumer;
     private static boolean keepOnReading = true;
     // mongo stuff.
     private static MongoClient mongoClient;
@@ -41,12 +41,13 @@ public class KafkaConsumerMain{
 
             while (keepOnReading) {
                 // get from kafka
-                ConsumerRecords<String, String> records = consumer.poll(Duration.ofMillis(100));
-                for (ConsumerRecord<String, String> record : records) {
-                    logger.info("Recived message to Kafkaconsumer\n Key: \n" + record.key() + "Value:\n" + record.value());
+                ConsumerRecords<String, Event> records = consumer.poll(Duration.ofMillis(100));
+                for (ConsumerRecord<String, Event> record : records) {
+                    logger.info("Recived message to Kafkaconsumer\n Key: \n" + record.key() + "JsonValue:\n" + EventFactory.toJson(record.value()));
                     logger.info("Partition: \n" + record.partition() + " Offset:\n" + record.offset());
 
-                    Event currEvent = EventFactory.createFromJson(record.value());
+                    //read event from kafka and transfer to basicDbEvent
+                    Event currEvent = record.value();
                     Map<String, Object> curEventMap = new HashMap<>();
                     curEventMap.put(finals.REPORTID_ID(), currEvent.getReportId());
                     curEventMap.put(finals.TIMESTAMP_ID(), currEvent.getTimestamp());
@@ -76,11 +77,11 @@ public class KafkaConsumerMain{
         properties = new Properties();
         groupID = "ABC";
         properties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, finals.BOOTSTRAP_SERVER());
-        properties.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());// bytes to string                                                                                            
-        properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
+        properties.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, EventDeserializer.class.getName());// bytes to string                                                                                            
+        properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, EventDeserializer.class.getName());
         properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, groupID);
         properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
-        consumer = new KafkaConsumer<String, String>(properties);
+        consumer = new KafkaConsumer<String, Event>(properties);
         // subscrive to our topics
         consumer.subscribe(Collections.singleton(finals.TOPIC()));
         // mongo stuff
