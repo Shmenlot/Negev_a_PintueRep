@@ -17,7 +17,6 @@ import org.apache.kafka.clients.consumer.ConsumerConfig;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
-import org.apache.kafka.common.serialization.StringDeserializer;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -78,7 +77,7 @@ public class KafkaConsumerMain{
         groupID = "ABC";
         properties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, finals.BOOTSTRAP_SERVER());
         properties.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, EventDeserializer.class.getName());// bytes to string                                                                                            
-        properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, EventDeserializer.class.getName());
+        properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, EventDeserializer.class.getName()); //// what's "Des"
         properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, groupID);
         properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         consumer = new KafkaConsumer<String, Event>(properties);

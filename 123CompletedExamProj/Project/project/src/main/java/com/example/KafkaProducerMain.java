@@ -11,46 +11,54 @@ import org.apache.kafka.clients.producer.RecordMetadata;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-public class KafkaProducerMain{
+public class KafkaProducerMain {
 
     private static Finals finals;
     private static Properties prop;
     private static KafkaProducer<String, Event> producer;
     private static Logger logger;
-    
-    public static void main(String[] args) {
 
+    public static void main(String[] args) {
         boolean keepOnSending = true;
         initialize();
-        EventFactory.initialize();
-        
-        while(keepOnSending){
+
+        while (keepOnSending) {
+            
             try {
-                TimeUnit.SECONDS.sleep(1);
+                TimeUnit.SECONDS.sleep(finals.DELAY_BETWEEN_EVENTS_CREATED());
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
+            
             KafkaProducerMain.sendEvent();
         }
+        
         KafkaProducerMain.finishProducer();
 
     }
-    
+
     public static void initialize() {
-        // create producer properties
+        // classes initialzation.
         finals = new Finals();
+        EventFactory.initialize();
+        
+
+        // create producer properties.
         prop = new Properties();
         prop.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, finals.BOOTSTRAP_SERVER());
         prop.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, EventSerializer.class.getName());
         prop.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, EventSerializer.class.getName());
         producer = new KafkaProducer<String, Event>(prop);
+        
+        // creating logger for sending info.
         logger = LoggerFactory.getLogger(KafkaProducerMain.class);
+
     }
 
     /**
      * send randomly generated event
      * 
-     * @RUNBEFORE {@link KafkaProducerMain.initialize}
+     * @RUNBEFORE {@link KafkaProducerMain#initialize()}
      */
     private static void sendEvent() {
 
@@ -63,16 +71,19 @@ public class KafkaProducerMain{
         // send and flush
         producer.send(record, new Callback() {
             public void onCompletion(RecordMetadata metadata, Exception e) {
+
                 // when record sent successfully
                 if (e == null) {
                     logger.info("Recived info\n" + "Topic " + metadata.topic() + "\nPartition " + metadata.partition()
                             + "\nOffset " + metadata.offset() + "\nTimestamp " + metadata.timestamp() + "\n ");
-                //when there was problem in sending the 
-                } else {
+
+                } else { // when there was problem in sending the event.
                     logger.error("Error while producing ", e);
                 }
+
             }
         });
+        
         producer.flush();
     }
 
@@ -80,10 +91,6 @@ public class KafkaProducerMain{
     private static void finishProducer() {
         producer.close();
     }
-
-    
-
-    
 
     /**
      * generates random event

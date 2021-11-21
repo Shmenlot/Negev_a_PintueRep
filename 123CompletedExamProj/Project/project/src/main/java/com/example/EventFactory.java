@@ -27,7 +27,7 @@ public class EventFactory{
         int nMetricValue = generateRandMetricVal();
 
         // update and then create in case of termation between commands will be skipped
-        // instead of two with same id
+        // instead of two with same id //// what is ds?
         MetadataAccesor.setNextReportId(nReportId + 1);
         MetadataAccesor.setNextMetricID(nMetricId + 1);
         return new Event(nReportId, nTimeStamp, nMetricId, nMetricValue, generateRandomSUString());
