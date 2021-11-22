@@ -9,7 +9,7 @@ import org.yaml.snakeyaml.Yaml;
 // This interface is used to centralize the
 public class Finals {
 
-    private static final String CONSTANTS = "./src/main/java/Constants.yml";
+    private static final String CONSTANTS = ".src/main/resources/Constants.yml";
     private static Yaml yaml;
     /**
      * The keys of the constants's class.
