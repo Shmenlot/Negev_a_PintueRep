@@ -44,7 +44,7 @@ public class KafkaConsumerMain{
                     logger.info("Recived message to Kafkaconsumer\n Key: \n" + record.key() + "JsonValue:\n" + EventFactory.toJson(record.value()));
                     logger.info("Partition: \n" + record.partition() + " Offset:\n" + record.offset());
 
-                    //read event from kafka and transfer to basicDbEvent
+                    //read event from kafka and transfer to basicDBObject
                     Event currEvent = record.value();
                     Map<String, Object> curEventMap = new HashMap<>();
                     curEventMap.put(finals.REPORTID_ID(), currEvent.getReportId());
