@@ -1,11 +1,11 @@
 #if you like to change one of the keys or add new key, change in Finals.initilize
 KafkaFinals:
   BOOTSTRAP_SERVER: "localhost:9092"
-  TOPIC: "prpepare0"
+  TOPIC: "demoTopic"
 
 MongoDB_Finals:
   MONGO_URL: "mongodb://localhost:27017"
-  MONGO_DB_NAME: "prpeareDataBase0"
+  MONGO_DB_NAME: "DemoDataBase0"
   MONGO_EVENTS_COLLECTION: "Events"
   MONGO_META_DATA_COLLECTION: "MetaData"
 
