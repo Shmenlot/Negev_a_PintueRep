@@ -1,11 +1,8 @@
 
-import java.io.IOException;
 import java.net.UnknownHostException;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import com.fasterxml.jackson.core.JsonParseException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.mongodb.BasicDBObject;
 import com.mongodb.DB;
 import com.mongodb.DBCollection;
@@ -21,7 +18,6 @@ import redis.clients.jedis.Jedis;
 
 public class MongoRedisMain extends Thread{
 
-    private static Finals finals;
     private static MongoClient mongoClient;
     private static DBCollection eventsCollection;
     private static Jedis jedis;
@@ -40,7 +36,7 @@ public class MongoRedisMain extends Thread{
                 mrm.start();
             }
             try {
-                TimeUnit.SECONDS.sleep(finals.DELAY_BETWEEN_MOVING_TO_REDIS());
+                TimeUnit.SECONDS.sleep(Finals.DELAY_BETWEEN_MOVING_TO_REDIS);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -55,37 +51,37 @@ public class MongoRedisMain extends Thread{
         BasicDBObject timeQuery = toFromDateQuery(lastRedisTime);
         DBCursor timeCursor = eventsCollection.find(timeQuery);
         String currentTimeStamp, currentReportID;
-        timeCursor.sort(new BasicDBObject(finals.TIMESTAMP_ID(), 1));
+        timeCursor.sort(new BasicDBObject(Finals.TIMESTAMP_ID, 1));
         // Insert the latest data from mongo into redis
         while (timeCursor.hasNext()) {
             // Add data by cursor to redis
             DBObject currentEvent = timeCursor.next();
-            currentReportID = Integer.toString((Integer) currentEvent.get(finals.REPORTID_ID()));
-            currentTimeStamp = ((Date) timeCursor.one().get(finals.TIMESTAMP_ID())).toInstant().toString();
+            currentReportID = Integer.toString((Integer) currentEvent.get(Finals.REPORTID_ID));
+            currentTimeStamp = ((Date) timeCursor.one().get(Finals.TIMESTAMP_ID)).toInstant().toString();
             jedis.set(currentReportID + ":" + currentTimeStamp, currentEvent.toString());
 
             // Send to redis and then update date for avoiding losing masseges (worst case
             // Overide himself)
             logger.info("Recived masage from mongo and sends to redis by]\n" + "Key:" + currentReportID + ":"
-                    + currentTimeStamp + "\nValue:" + currentEvent.toString() + "\n");
+                    + currentTimeStamp + "\nValue:" + currentEvent + "\n");
             // Update Latest date in metadata.
-            MetadataAccesor.setLastRedisTime((Date) (currentEvent.get(finals.TIMESTAMP_ID())));
+            MetadataAccesor.setLastRedisTime((Date) (currentEvent.get(Finals.TIMESTAMP_ID)));
         }
     }
 
     public static void initialize() {
         try {
-            finals = new Finals();
+            Finals.intiliaze();
             // create logger
             logger = LoggerFactory.getLogger(KafkaProducerMain.class.getName());
             // Redis stauff
-            jedis = new Jedis(finals.HOST(), finals.REDIS_PORT());
+            jedis = new Jedis(Finals.HOST, Finals.REDIS_PORT);
             // mongo stuff
-            mongoClient = new MongoClient(new MongoClientURI(finals.MONGO_URL()));
+            mongoClient = new MongoClient(new MongoClientURI(Finals.MONGO_URL));
             // create database.
-            database = mongoClient.getDB(finals.MONGO_DB_NAME());
+            database = mongoClient.getDB(Finals.MONGO_DB_NAME);
             // create collection
-            eventsCollection = database.getCollection(finals.MONGO_EVENTS_COLLECTION());
+            eventsCollection = database.getCollection(Finals.MONGO_EVENTS_COLLECTION);
             MetadataAccesor.initialize();
         } catch (UnknownHostException e) {
 
@@ -98,11 +94,8 @@ public class MongoRedisMain extends Thread{
      * transfer date to db object that represent query for finding things from the
      * query and forwoar
      * 
-     * @param d
-     * @return
-     * @throws IOException
-     * @throws JsonMappingException
-     * @throws JsonParseException
+     * @param d the date
+     * @return the query
      */
     private static BasicDBObject toFromDateQuery(Date d) {
 

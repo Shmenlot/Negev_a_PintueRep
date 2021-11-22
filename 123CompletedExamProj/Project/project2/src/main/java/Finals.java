@@ -21,46 +21,46 @@ public class Finals {
     private static final String EVENTSKEYS = "EventsKeys";
     private static final String REDISFINALS = "RedisFinals";
 
-    private String _BOOTSTRAP_SERVER;
-    private String _TOPIC;
+    public static String BOOTSTRAP_SERVER = "localhost:9092";
+    public static String TOPIC = "default_topic";
 
     /**
      * these are the mongoDB Finals in here we save the connection, collection and
      * db names.
      */
-    private String _MONGO_URL;
-    private String _MONGO_DB_NAME;
-    private String _MONGO_EVENTS_COLLECTION;
-    private String _MONGO_META_DATA_COLLECTION;
+    public static String MONGO_URL = "mongodb://localhost:27017";
+    public static String MONGO_DB_NAME = "default_data_base";
+    public static String MONGO_EVENTS_COLLECTION = "Events";
+    public static String MONGO_META_DATA_COLLECTION = "MetaData";
 
     // metadata keys
-    private String _NEXT_REPORT_ID;
-    private String _NEXT_METRIC_ID;
-    private String _LAST_REDIS_TIME_STAMP;
+    public static String NEXT_REPORT_ID = "nextReportID";
+    public static String NEXT_METRIC_ID = "nextMetricID";
+    public static String LAST_REDIS_TIME_STAMP = "lastRedisTimeStamp";
 
     // time units
-    private int _DELAY_BETWEEN_EVENTS_CREATED;
-    private int _DELAY_BETWEEN_MOVING_TO_REDIS;
+    public static int DELAY_BETWEEN_EVENTS_CREATED = 1;
+    public static int DELAY_BETWEEN_MOVING_TO_REDIS = 10;
 
     // Events keys.
-    private String _REPORTID_ID;
-    private String _TIMESTAMP_ID;
-    private String _METRICID_ID;
-    private String _METRIC_VALUE_ID;
-    private String _MESSAGE_ID;
+    public static String REPORTID_ID = "reportId";
+    public static String TIMESTAMP_ID = "timestamp";
+    public static String METRICID_ID = "metricId";
+    public static String METRIC_VALUE_ID = "metricValue";
+    public static String MESSAGE_ID = "message";
 
     // redis Finals
-    private String _HOST;
-    private int _REDIS_PORT;
+    public static String HOST = "localhost";
+    public static int REDIS_PORT = 6379;
 
-    public Finals() {
+    public static void intiliaze() {
         try {
             // load constants as yaml
             yaml = new Yaml();
             Map<String, Object> finalsMap;
             finalsMap = yaml.load(new FileReader(new File(CONSTANTS)));
 
-            
+
             // divide to subMaps
             Map<String, Object> kafkaMapFinals = (Map<String, Object>) finalsMap.get(KAFKAFINALS);
             Map<String, Object> mongoMapFinals = (Map<String, Object>) finalsMap.get(MONGODB_FINALS);
@@ -72,108 +72,41 @@ public class Finals {
             // read all finals
 
             // kafka finals
-            _BOOTSTRAP_SERVER = (String) kafkaMapFinals.get("BOOTSTRAP_SERVER");
-            _TOPIC = (String) kafkaMapFinals.get("TOPIC");
+            BOOTSTRAP_SERVER = (String) kafkaMapFinals.get("BOOTSTRAP_SERVER");
+            TOPIC = (String) kafkaMapFinals.get("TOPIC");
 
             // mongodb finals
-            _MONGO_URL = (String) mongoMapFinals.get("MONGO_URL");
-            _MONGO_DB_NAME = (String) mongoMapFinals.get("MONGO_DB_NAME");
-            _MONGO_EVENTS_COLLECTION = (String) mongoMapFinals.get("MONGO_EVENTS_COLLECTION");
-            _MONGO_META_DATA_COLLECTION = (String) mongoMapFinals.get("MONGO_META_DATA_COLLECTION");
+            MONGO_URL = (String) mongoMapFinals.get("MONGO_URL");
+            MONGO_DB_NAME = (String) mongoMapFinals.get("MONGO_DB_NAME");
+            MONGO_EVENTS_COLLECTION = (String) mongoMapFinals.get("MONGO_EVENTS_COLLECTION");
+            MONGO_META_DATA_COLLECTION = (String) mongoMapFinals.get("MONGO_META_DATA_COLLECTION");
 
             // metadata keys
-            _NEXT_REPORT_ID = (String) metaDataKeys.get("NEXT_REPORT_ID");
-            _NEXT_METRIC_ID = (String) metaDataKeys.get("NEXT_METRIC_ID");
-            _LAST_REDIS_TIME_STAMP = (String) metaDataKeys.get("LAST_REDIS_TIME_STAMP");
+            NEXT_REPORT_ID = (String) metaDataKeys.get("NEXT_REPORT_ID");
+            NEXT_METRIC_ID = (String) metaDataKeys.get("NEXT_METRIC_ID");
+            LAST_REDIS_TIME_STAMP = (String) metaDataKeys.get("LAST_REDIS_TIME_STAMP");
 
             // time units
-            _DELAY_BETWEEN_EVENTS_CREATED = (Integer) timeUnitesMapFinals.get("DELAY_BETWEEN_EVENTS_CREATED");
-            _DELAY_BETWEEN_MOVING_TO_REDIS = (Integer) timeUnitesMapFinals.get("DELAY_BETWEEN_MOVING_TO_REDIS");
+            DELAY_BETWEEN_EVENTS_CREATED = (Integer) timeUnitesMapFinals.get("DELAY_BETWEEN_EVENTS_CREATED");
+            DELAY_BETWEEN_MOVING_TO_REDIS = (Integer) timeUnitesMapFinals.get("DELAY_BETWEEN_MOVING_TO_REDIS");
 
             // event keys
-            _REPORTID_ID = (String) eventsKeysMap.get("REPORTID_ID");
-            _TIMESTAMP_ID = (String) eventsKeysMap.get("TIMESTAMP_ID");
-            _METRICID_ID = (String) eventsKeysMap.get("METRICID_ID");
-            _METRIC_VALUE_ID = (String) eventsKeysMap.get("METRICVALUE_ID");
-            _MESSAGE_ID = (String) eventsKeysMap.get("MESSAGE_ID");
-            
-            
+            REPORTID_ID = (String) eventsKeysMap.get("REPORTID_ID");
+            TIMESTAMP_ID = (String) eventsKeysMap.get("TIMESTAMP_ID");
+            METRICID_ID = (String) eventsKeysMap.get("METRICID_ID");
+            METRIC_VALUE_ID = (String) eventsKeysMap.get("METRICVALUE_ID");
+            MESSAGE_ID = (String) eventsKeysMap.get("MESSAGE_ID");
+
+
             // redis finals
-            _HOST = (String) redisMapFinals.get("HOST");
-            _REDIS_PORT = (Integer) redisMapFinals.get("REDIS_PORT");
+            HOST = (String) redisMapFinals.get("HOST");
+            REDIS_PORT = (Integer) redisMapFinals.get("REDIS_PORT");
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         }
     }
 
-    public String BOOTSTRAP_SERVER() {
-        return this._BOOTSTRAP_SERVER;
-    }
 
-    public String TOPIC() {
-        return this._TOPIC;
-    }
-
-    public String MONGO_URL() {
-        return this._MONGO_URL;
-    }
-
-    public String MONGO_DB_NAME() {
-        return this._MONGO_DB_NAME;
-    }
-
-    public String MONGO_EVENTS_COLLECTION() {
-        return this._MONGO_EVENTS_COLLECTION;
-    }
-
-    public String MONGO_META_DATA_COLLECTION() {
-        return this._MONGO_META_DATA_COLLECTION;
-    }
-
-    public String NEXT_REPORT_ID() {
-        return this._NEXT_REPORT_ID;
-    }
-
-    public String NEXT_METRIC_ID() {
-        return this._NEXT_METRIC_ID;
-    }
-
-    public String LAST_REDIS_TIME_STAMP() {
-        return this._LAST_REDIS_TIME_STAMP;
-    }
-
-    public int DELAY_BETWEEN_EVENTS_CREATED() {
-        return this._DELAY_BETWEEN_EVENTS_CREATED;
-    }
-
-    public int DELAY_BETWEEN_MOVING_TO_REDIS() {
-        return this._DELAY_BETWEEN_MOVING_TO_REDIS;
-    }
-
-    public String REPORTID_ID() {
-        return this._REPORTID_ID;
-    }
-
-    public String TIMESTAMP_ID() {
-        return this._TIMESTAMP_ID;
-    }
-
-    public String HOST() {
-        return this._HOST;
-    }
-
-    public int REDIS_PORT() {
-        return this._REDIS_PORT;
-    }
-    public String METRICID_ID(){
-        return _METRICID_ID;
-    }
-    public String METRIC_VALUE_ID(){
-        return _METRIC_VALUE_ID;
-    }
-    public String MESSAGE_ID(){
-        return _MESSAGE_ID;
-    }
 
 }
