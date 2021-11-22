@@ -7,9 +7,9 @@ import java.util.Map;
 import org.yaml.snakeyaml.Yaml;
 
 // This interface is used to centralize the
-public class Finals {
+public class Config {
 
-    private static final String CONSTANTS = "./src/main/resources/Constants.yml";
+    private static final String CONSTANTS = "./src/main/resources/Config.yml";
     private static Yaml yaml;
     /**
      * The keys of the constants's class.

@@ -46,11 +46,11 @@ public class KafkaConsumerMain{
                     //read event from kafka and transfer to basicDBObject
                     Event currEvent = record.value();
                     Map<String, Object> curEventMap = new HashMap<>();
-                    curEventMap.put(Finals.REPORTID_ID, currEvent.getReportId());
-                    curEventMap.put(Finals.TIMESTAMP_ID, currEvent.getTimestamp());
-                    curEventMap.put(Finals.METRICID_ID, currEvent.getMetricId());
-                    curEventMap.put(Finals.METRIC_VALUE_ID, currEvent.getMetricValue());
-                    curEventMap.put(Finals.MESSAGE_ID, currEvent.getMessage());
+                    curEventMap.put(Config.REPORTID_ID, currEvent.getReportId());
+                    curEventMap.put(Config.TIMESTAMP_ID, currEvent.getTimestamp());
+                    curEventMap.put(Config.METRICID_ID, currEvent.getMetricId());
+                    curEventMap.put(Config.METRIC_VALUE_ID, currEvent.getMetricValue());
+                    curEventMap.put(Config.MESSAGE_ID, currEvent.getMessage());
 
                     BasicDBObject eventObj = new BasicDBObject(curEventMap);
                     eventsCollection.insert(eventObj);
@@ -67,26 +67,26 @@ public class KafkaConsumerMain{
      * initialize the consumer
      */
     private static void initialize() throws UnknownHostException{
-        Finals.intiliaze();
+        Config.intiliaze();
         // initialize kafka consumer.
         logger = LoggerFactory.getLogger(KafkaConsumerMain.class.getName());
         
         properties = new Properties();
         groupID = "ABC";
-        properties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, Finals.BOOTSTRAP_SERVER);
+        properties.setProperty(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, Config.BOOTSTRAP_SERVER);
         properties.setProperty(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, EventDeserializer.class.getName());// bytes to string                                                                                            
         properties.setProperty(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, EventDeserializer.class.getName()); //// what's "Des"
         properties.setProperty(ConsumerConfig.GROUP_ID_CONFIG, groupID);
         properties.setProperty(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         consumer = new KafkaConsumer<String, Event>(properties);
         // subscrive to our topics
-        consumer.subscribe(Collections.singleton(Finals.TOPIC));
+        consumer.subscribe(Collections.singleton(Config.TOPIC));
         // mongo stuff
-        mongoClient = new MongoClient(new MongoClientURI(Finals.MONGO_URL));
+        mongoClient = new MongoClient(new MongoClientURI(Config.MONGO_URL));
         // create database.
-        database = mongoClient.getDB(Finals.MONGO_DB_NAME);
+        database = mongoClient.getDB(Config.MONGO_DB_NAME);
         // create collection
-        eventsCollection = database.getCollection(Finals.MONGO_EVENTS_COLLECTION);
+        eventsCollection = database.getCollection(Config.MONGO_EVENTS_COLLECTION);
 
     }
 
