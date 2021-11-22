@@ -1,4 +1,7 @@
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import java.util.Date;
 // this class is document template.
 public class Event {
@@ -46,6 +49,13 @@ public class Event {
     
     public String getMessage() {
         return this.message;
+    }
+    /**
+     * Make Json String that represent the object
+     */
+    public String toJson() {
+        Gson g = new GsonBuilder().setDateFormat("MM dd, yyyy HH:mm:ss").create();
+        return g.toJson(this);
     }
 
 

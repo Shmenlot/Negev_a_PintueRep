@@ -36,13 +36,6 @@ public class EventFactory{
         MetadataAccesor.initialize();
     }
 
-    /**
-     * Make Json String that represent the object
-     */
-    public static String toJson(Event event) {
-        Gson g = new GsonBuilder().setDateFormat("MM dd, yyyy HH:mm:ss").create();
-        return g.toJson(event);
-    }
 
     /**
      * create event from object

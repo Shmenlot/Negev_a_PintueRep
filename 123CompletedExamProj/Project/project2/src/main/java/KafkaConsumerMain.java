@@ -40,7 +40,7 @@ public class KafkaConsumerMain{
                 // get from kafka
                 ConsumerRecords<String, Event> records = consumer.poll(Duration.ofMillis(100));
                 for (ConsumerRecord<String, Event> record : records) {
-                    logger.info("Recived message to Kafkaconsumer\n Key: \n" + record.key() + "JsonValue:\n" + EventFactory.toJson(record.value()));
+                    logger.info("Recived message to Kafkaconsumer\n Key: \n" + record.key() + "JsonValue:\n" + record.value().toJson());
                     logger.info("Partition: \n" + record.partition() + " Offset:\n" + record.offset());
 
                     //read event from kafka and transfer to basicDBObject
