@@ -4,6 +4,8 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Map;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.yaml.snakeyaml.Yaml;
 
 // This interface is used to centralize the
@@ -11,6 +13,7 @@ public class Config {
 
     private static final String CONSTANTS = "./src/main/resources/Config.yml";
     private static Yaml yaml;
+    private static Logger log = LoggerFactory.getLogger(Config.class.getName());
     /**
      * The keys of the constants's class.
      */
@@ -104,6 +107,7 @@ public class Config {
 
         } catch (FileNotFoundException e) {
             e.printStackTrace();
+            log.error(e.toString());
         }
     }
 

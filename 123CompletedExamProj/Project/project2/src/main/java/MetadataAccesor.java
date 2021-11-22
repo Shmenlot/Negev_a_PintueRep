@@ -9,11 +9,15 @@ import com.mongodb.DBCursor;
 import com.mongodb.DBObject;
 import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class MetadataAccesor{
-    static MongoClient mongoClient;
-    static DB database;
-    static DBCollection metaDataCollection;
+    private static MongoClient mongoClient;
+    private static DB database;
+    private static DBCollection metaDataCollection;
+    private static Logger logger = LoggerFactory.getLogger(KafkaProducerMain.class);
+    ;
 
     public static void initialize() {
         Config.intiliaze();
@@ -23,6 +27,7 @@ public class MetadataAccesor{
             mongoClient = new MongoClient(new MongoClientURI(Config.MONGO_URL));
         } catch (UnknownHostException e) {
             e.printStackTrace();
+            logger.error(e.toString());
         }
         // create database.
         database = mongoClient.getDB(Config.MONGO_DB_NAME);

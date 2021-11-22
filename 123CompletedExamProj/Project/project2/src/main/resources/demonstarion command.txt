@@ -26,6 +26,9 @@ flushall
 
     #while presenting
 
+#describe a topic
+kafka-topics.sh --bootstrap-server local:9092 --topic topicname --describe
+
 #see mongo files
 mongo
 use DemoDataBase0
