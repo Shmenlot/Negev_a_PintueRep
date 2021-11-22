@@ -12,7 +12,6 @@ import org.slf4j.LoggerFactory;
 
 public class KafkaProducerMain {
 
-    private static Finals finals;
     private static Properties prop;
     private static KafkaProducer<String, Event> producer;
     private static Logger logger;
@@ -24,7 +23,7 @@ public class KafkaProducerMain {
         while (keepOnSending) {
             
             try {
-                TimeUnit.SECONDS.sleep(finals.DELAY_BETWEEN_EVENTS_CREATED());
+                TimeUnit.SECONDS.sleep(Finals.DELAY_BETWEEN_EVENTS_CREATED);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
@@ -38,13 +37,13 @@ public class KafkaProducerMain {
 
     public static void initialize() {
         // classes initialzation.
-        finals = new Finals();
+        Finals.intiliaze();
         EventFactory.initialize();
         
 
         // create producer properties.
         prop = new Properties();
-        prop.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, finals.BOOTSTRAP_SERVER());
+        prop.setProperty(ProducerConfig.BOOTSTRAP_SERVERS_CONFIG, Finals.BOOTSTRAP_SERVER);
         prop.setProperty(ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG, EventSerializer.class.getName());
         prop.setProperty(ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG, EventSerializer.class.getName());
         producer = new KafkaProducer<String, Event>(prop);
@@ -65,7 +64,7 @@ public class KafkaProducerMain {
         Event event = generateRandomEvent();
 
         // create record
-        ProducerRecord<String, Event> record = new ProducerRecord<String, Event>(finals.TOPIC(), event);
+        ProducerRecord<String, Event> record = new ProducerRecord<String, Event>(Finals.TOPIC, event);
 
         // send and flush
         producer.send(record, new Callback() {
