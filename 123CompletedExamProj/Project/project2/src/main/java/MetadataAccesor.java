@@ -11,13 +11,12 @@ import com.mongodb.MongoClient;
 import com.mongodb.MongoClientURI;
 
 public class MetadataAccesor{
-    private static Finals Finals;
     static MongoClient mongoClient;
     static DB database;
     static DBCollection metaDataCollection;
 
     public static void initialize() {
-        Finals = new Finals();
+        Finals.intiliaze();
 
         // mongo stuff
         try {
