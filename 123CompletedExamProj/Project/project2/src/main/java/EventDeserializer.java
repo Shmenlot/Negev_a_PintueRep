@@ -7,5 +7,5 @@ public class EventDeserializer implements Deserializer<Event> {
     public Event deserialize(String topic, byte[] data) {
         return EventFactory.createFromJson(new String(data));
     }
-    
+
 }
