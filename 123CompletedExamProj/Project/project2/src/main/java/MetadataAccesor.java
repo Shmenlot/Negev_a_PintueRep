@@ -26,8 +26,7 @@ public class MetadataAccesor{
         try {
             mongoClient = new MongoClient(new MongoClientURI(Config.MONGO_URL));
         } catch (UnknownHostException e) {
-            e.printStackTrace();
-            logger.error(e.toString());
+            logger.error(e.getMessage());
         }
         // create database.
         database = mongoClient.getDB(Config.MONGO_DB_NAME);

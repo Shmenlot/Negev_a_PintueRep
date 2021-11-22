@@ -59,8 +59,7 @@ public class KafkaConsumerMain{
                 }
             }
         } catch (UnknownHostException e) {
-            e.printStackTrace();
-            logger.error(e.toString());
+            logger.error(e.getMessage());
         }
         KafkaConsumerMain.closeConsumer();
     }

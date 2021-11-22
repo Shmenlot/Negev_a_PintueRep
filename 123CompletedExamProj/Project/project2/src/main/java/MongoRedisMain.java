@@ -39,8 +39,7 @@ public class MongoRedisMain extends Thread{
             try {
                 TimeUnit.SECONDS.sleep(Config.DELAY_BETWEEN_MOVING_TO_REDIS);
             } catch (InterruptedException e) {
-                e.printStackTrace();
-                logger.error(e.toString());
+                logger.error(e.getMessage());
             }
 
         }

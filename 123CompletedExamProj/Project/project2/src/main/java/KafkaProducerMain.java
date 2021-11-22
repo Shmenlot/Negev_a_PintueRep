@@ -26,8 +26,7 @@ public class KafkaProducerMain {
             try {
                 TimeUnit.SECONDS.sleep(Config.DELAY_BETWEEN_EVENTS_CREATED);
             } catch (InterruptedException e) {
-                e.printStackTrace();
-                logger.error(e.toString());
+                logger.error(e.getMessage());
             }
             
             KafkaProducerMain.sendEvent();

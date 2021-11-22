@@ -106,8 +106,7 @@ public class Config {
             REDIS_PORT = (Integer) redisMapFinals.get("REDIS_PORT");
 
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
-            log.error(e.toString());
+            log.error(e.getMessage());
         }
     }
 
