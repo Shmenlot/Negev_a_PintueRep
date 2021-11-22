@@ -55,7 +55,7 @@ public class Event {
      */
     public String toJson() {
         Gson g = new GsonBuilder().setDateFormat("MM dd, yyyy HH:mm:ss").create();
-        return g.toJson(this);
+        return g.toJson(this,Event.class);
     }
 
 
