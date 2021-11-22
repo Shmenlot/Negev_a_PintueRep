@@ -34,13 +34,14 @@ public class MongoRedisMain extends Thread{
                 mrm = new MongoRedisMain();
                 logger.info("Starts Iteration " + i);
                 mrm.start();
+                i++;
             }
             try {
                 TimeUnit.SECONDS.sleep(Finals.DELAY_BETWEEN_MOVING_TO_REDIS);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
-            i++;
+
         }
     }
 
